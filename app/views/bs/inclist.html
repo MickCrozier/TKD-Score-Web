@@ -1,0 +1,48 @@
+
+<!-- THIS IS THE INC LIST FILE -->
+
+<div class="bs_list_edit">
+	<h2>Edit {{bsListname}} List</h2>
+	<table>
+		<thead>
+		<tr>
+			<th ng-repeat="obj in bsListkeys">{{obj.key}}</th>
+			<th>Actions</th>
+		</tr>
+		</thead>
+		<tbody>
+
+		<tr ng-repeat="row in bsListdata" class="bs_row">
+			<form name="editForm">
+			<td	ng-repeat="obj in bsListkeys">
+				<!-- <input type="text" ng-model="row[obj.key]" ng-blur="onFieldBlur($event, row, editForm)"> -->
+				<span ng-bind="row[obj.key] | {{obj.filter}}" ></span>
+			</td>
+			<td>
+				<button type="button" ng-click="onDetailClick($event, row)" class="btn btn-primary btn-sm" tooltip="Details" tooltip-placement="right">
+					<span class="glyphicon glyphicon-circle-arrow-right"></span>
+				</button>
+				<button type="button" ng-click="onRemoveClick($event, row)" class="btn btn-danger btn-sm" tooltip="Remove this {{bsListname}}" tooltip-placement="right">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+
+			</td>
+			</form>
+		</tr>
+
+		<tr class="bs_row">
+			<form name="newForm">
+			<td	ng-repeat="key in bsListkeys">
+				<input type="text" ng-model="newItem[key]" required>
+			</td>
+			<td>
+				<button type="button" ng-click="onAddClick($event)" class="btn btn-primary btn-sm" tooltip="Save new {{bsListname}}" tooltip-placement="right">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</td>
+			</form>
+		</tr>
+		</tbody>
+	</table>
+</div>
+	

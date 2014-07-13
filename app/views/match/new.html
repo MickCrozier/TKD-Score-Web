@@ -1,0 +1,19 @@
+
+
+<div class="container">
+	<form class="form" name="newForm" novalidate>
+	<h1> New Asset </h1>
+
+
+	<div>
+		<label>Description</label>
+		<input type="text" ng-model="editFormModel.description" name="description" class="form-control" required>
+	</div>
+	
+	<div>
+		<button id="btn-add" ng-click="onCreateClick()" class="btn btn-primary btn-lg">
+		<span class="glyphicon glyphicon-save"></span>Create
+	</button>
+	</div>
+	</form>
+</div>

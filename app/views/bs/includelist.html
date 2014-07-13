@@ -1,0 +1,27 @@
+<div>
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th ng-repeat="key in bsListtitles">{{key}}</th>
+			<th>Actions</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="row in bsListdata" class="bs_row"  ng-click="onDetailClick($event, row)">
+			<td	ng-repeat="key in bsListkeys">
+				{{row[key]}}
+			</td>
+			<td>
+				<button type="button" ng-click="onRemoveClick($event, row)" class="btn btn-danger btn-sm" tooltip="Remove {{bsListname}}" tooltip-placement="top">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+
+
+
+

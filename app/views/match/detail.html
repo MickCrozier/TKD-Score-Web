@@ -1,0 +1,91 @@
+<form class="form" editable-form name="matchEditForm" onaftersave="onTriggerUpdate()">
+<table class="table">
+	<tr>
+		<td colspan="2">
+			<div ng-show="matchEditForm.$visible">
+				<button type="submit" id="btn-add" class="btn btn-primary btn-lg" ng-disabled="matchEditForm.$waiting">
+					<span class="glyphicon glyphicon-ok-circle"></span> Save
+				</button>
+				<button type="button" id="btn-add" ng-click="cancelUserEdit()" class="btn btn-default btn-lg"  ng-disabled="matchEditForm.$waiting">
+					<span class="glyphicon glyphicon-ban-circle"></span> Cancel
+				</button>
+			</div>
+
+			<div ng-hide="matchEditForm.$visible">
+				<button type="button" id="btn-add" ng-click="matchEditForm.$show()" class="btn btn-primary btn-lg">
+					<span class="glyphicon glyphicon-edit"></span> Edit
+				</button>
+			</div>
+
+
+			<button type="button" ng-click="onRemoveClick($event)" class="btn btn-danger btn-xs pull-right" tooltip="Delete asset">	
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+
+			
+
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Match ID
+		</td>
+		<td class="">
+			{{match._id}}
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Hong
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.player1" buttons="yes">{{match.player1 || 'No Name'}}</span>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Chong
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.player2" buttons="yes">{{match.player2 || 'No Name'}}</span>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Rounds
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.numberOfRounds" buttons="yes">{{match.numberOfRounds || 'Default'}}</span>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Round Time
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.roundLengthMS" buttons="yes">{{match.roundLengthMS || 'Default'}}</span>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Break Time
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.breakLengthMS" buttons="yes">{{match.breakLengthMS || 'Default'}}</span>
+		</td>
+	</tr>
+	
+
+</table>
+</form>
+
+	
+
+
+
