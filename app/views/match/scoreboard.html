@@ -1,0 +1,29 @@
+
+
+<div id="roundtimer" ng-bind="timer.roundTimeMS | formatTime:true">
+
+</div>
+<div id="breaktimer" ng-bind="timer.breakTimeMS | formatTime:true">
+
+</div>
+<div id="pausewatch" ng-bind="timer.pauseWatchMS | formatTime:false">
+
+</div>
+<div id="round" ng-bind="match.round">
+
+</div>
+
+<div id="scoreboard scoreboard-left">
+  <div id="player1" ng-bind="match.player1"></div>
+  <div class="points" ng-bind="match.player1Points"></div>
+  <div class="penalties" ng-bind="match.player1Penalties"></div>
+</div>
+
+
+<div id="scoreboard scoreboard-right">
+  <div id="player2" ng-bind="match.player2"></div>
+  <div class="points" ng-bind="match.player2Points"></div>
+  <div class="penalties" ng-bind="match.player2Penalties"></div>
+</div>
+
+

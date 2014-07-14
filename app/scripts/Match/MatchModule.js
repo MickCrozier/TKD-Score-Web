@@ -18,14 +18,16 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
 
         .state('match_new', {
             url: '/new',
-            templateUrl: 'views/match/new.html',
+            templateUrl: 'views/match/detail.html',
             controller: 'MatchCtrl',
+            resolve: {
+                resolved_match: MatchModule.new_match,
+            }
         })
 
         .state('match', {
             abstract: true,
             url: '/:match_id',
-            controller: 'MatchCtrl',
             templateUrl: 'views/match/parent.html',
             resolve: {
                 resolved_match: MatchModule.resolve_match,
@@ -35,8 +37,8 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
         .state('match_detail', {
             parent:'match',
             url: '/detail',
+            controller: 'MatchCtrl',
             templateUrl: 'views/match/detail.html',
-            //controller: 'MatchCtrl',
         })
 
         .state('match_home', {
@@ -48,24 +50,88 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
 
         .state('match_scoreboard', {
             parent: 'match',
-            controller: 'MatchCtrl',
-            url: '/',
+            controller: 'MatchScoreboardCtrl',
+            url: '/scoreboard',
             templateUrl: 'views/match/scoreboard.html',
+        })
+
+        .state('match_controls', {
+            parent: 'match',
+            controller: 'MatchControlsCtrl',
+            url: '/controls',
+            templateUrl: 'views/match/controls.html',
         });
+
     }]
-);
+)
+
+
+/**
+ * @ngdoc filter
+ * @name formatTime
+ * @function
+ * 
+ * @description
+ * To a millisecon value - returns minutes and seconds
+ * isCountDown adds 999 milliseconds to display - to 0 is triggered when it changes to 0
+ * rather than 1 second later
+ */
+.filter('formatTime', [
+
+    function() {
+        return function(rawtime, isCountDown) {
+
+            var adjustedTime = rawtime;
+            // when counting down need to add time on the display so that timers will appear to stop SMACK ON 00:00
+            if(isCountDown) { 
+              adjustedTime = rawtime + 999; 
+            }
+
+            var ds = Math.round(adjustedTime/100) + '';
+            var sec = Math.floor(adjustedTime/1000);
+            var min = Math.floor(adjustedTime/60000);
+            ds = ds.charAt(ds.length - 1);
+
+            sec = sec - 60 * min + '';
+
+            if(sec.charAt(sec.length - 2) !== '') {
+              sec = sec.charAt(sec.length - 2) + sec.charAt(sec.length - 1);
+            } else {
+              sec = 0 + sec.charAt(sec.length - 1);
+            } 
+            min = min + '';
+
+            if(min.charAt(min.length - 2) !== '')
+            {
+              min = min.charAt(min.length - 2)+min.charAt(min.length - 1);
+            } else {
+              min = 0 + min.charAt(min.length - 1);
+            }
+            //return min + ':' + sec + ':' + ds;
+            return min + ':' + sec;
+        };
+
+
+    }
+]);
 
 MatchModule.resolve_match = ['$q', '$stateParams', 'MatchService',
-        function($q, $stateParams, MatchService) {
-            var defer = $q.defer();
-            MatchService.find($stateParams.match_id).then(function(foundItem) {
-                defer.resolve(foundItem);
-            }, function fail(err) {
-                defer.reject(err);
-            });
+    function($q, $stateParams, MatchService) {
+        var defer = $q.defer();
+        MatchService.find($stateParams.match_id).then(function(foundItem) {
+            defer.resolve(foundItem);
+        }, function fail(err) {
+            defer.reject(err);
+        });
 
-            return defer.promise;
-        }
-    ];
+        return defer.promise;
+    }
+];
+
+MatchModule.new_match = ['MatchService',
+    function(MatchService) {
+        return MatchService.generateNew({});
+    }
+];
 
 })();

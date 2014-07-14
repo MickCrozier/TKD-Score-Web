@@ -90,14 +90,7 @@
             return l;
         };
 
-        f.prototype.remove = function(row) {
-            row.remove().then(function success() {
-                var index = this.items.indexOf(row);
-                this.items.splice(index, 1); // remove local copy without reloading from server
-            }, function fail() {
-
-            });
-        };
+        
 
         return f;
         

@@ -5,7 +5,7 @@
 <div class="container-fluid">
 
 	<table class="table table-hover">
-	<thead>
+
 		<tr>
 			<th>Match Id</th>
 			<th>Match Id</th>
@@ -15,9 +15,8 @@
 				Action
 			</th>
 		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="row in matchList" class="row" ng-click="onDetail($event, row)">
+
+		<tr ng-repeat="row in matchList" class="row" ng-click="onControls($event, row)">
 			<td>
 				{{row._id}}
 			</td>
@@ -31,11 +30,15 @@
 				<button ng-click="onDetail($event, row)" class="btn btn-primary btn-md">
 				<span class="glyphicon glyphicon-circle-arrow-right"></span>
 				</button>
+				<button ng-click="onScoreboard($event, row)" class="btn btn-primary btn-md">
+				<span class="glyphicon glyphicon-eye-open"></span>
+				</button>
+
 				<button ng-click="onRemove($event, row)" class="btn btn-danger btn-md">
 				<span class="glyphicon glyphicon-remove"></span>
 				</button>
 			</td>
 		</tr>
-	</tbody>
+
 	</table>
 </div>

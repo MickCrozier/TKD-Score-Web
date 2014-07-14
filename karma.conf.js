@@ -32,6 +32,7 @@ module.exports = function(config) {
       'bower_components/lodash/dist/lodash.compat.js',
       'bower_components/restangular/dist/restangular.js',
       'bower_components/angular-xeditable/dist/js/xeditable.js',
+      'bower_components/angular-socket-io/socket.js',
       
       'app/scripts/*.js',
       'app/scripts/**/*Module.js',
