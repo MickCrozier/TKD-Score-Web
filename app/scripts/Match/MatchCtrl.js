@@ -121,4 +121,69 @@ angular.module('tkdApp.match')
         });
 
     }
+])
+
+
+.controller('MatchControlsCtrl', ['$scope', '$state', 'Socket', 'resolved_match',
+    function($scope, $state, Socket, resolved_match) {
+        var beep = new Audio('sounds/beep1.wav');
+
+        $scope.match = resolved_match;
+        $scope.timer = {
+            roundTimeMS: resolved_match.roundTimeMS,
+            breakTimeMS: resolved_match.breakTimeMS,
+            pauseWatchMS: 0,
+        };
+
+        Socket.emit('join', {id:resolved_match._id});
+
+        Socket.on('soundhorn', function() {
+            beep.play();
+        });
+
+
+        Socket.on('match', function(match) {
+            $scope.match = match;
+        });
+
+        $scope.edit = function(e) {
+            e.stopPropagation();
+            $state.go('match_detail', {
+                match_id: $scope.match._id
+            });
+        };
+
+        $scope.round = function(e, val) {
+            e.stopPropagation();
+            Socket.emit('round', {id:$scope.match._id, value:$scope.match.round + val});
+        };
+
+        $scope.points = function(e, player, points) {
+            e.stopPropagation();
+            console.log(player);
+            Socket.emit('points', {id:$scope.match._id, player: player, points:points});
+        };
+
+        $scope.penalties = function(e, player, points) {
+            e.stopPropagation();
+
+            Socket.emit('penalties', {id:$scope.match._id, player: player, points:points});
+        };
+
+        $scope.reset = function(e) {
+            e.stopPropagation();
+            Socket.emit('reset', {id:$scope.match._id});
+        };
+
+        $scope.pauseResume = function(e) {
+            e.stopPropagation();
+            Socket.emit('pauseresume', {id:$scope.match._id});
+        }
+
+        $scope.soundhorn = function(e) {
+            e.stopPropagation();
+            Socket.emit('soundhorn', {id:$scope.match._id});
+        };
+
+    }
 ]);
