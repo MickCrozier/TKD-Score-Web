@@ -1,0 +1,79 @@
+.scoreboard {
+	text-align: center;
+	margin: auto 0;
+	background: black;
+	color: white;
+}
+
+.scoreboard .scoreboard-left {
+	min-width:50%;
+	background-color: red;
+	float:left;
+	text-align: left;
+}
+
+.scoreboard .scoreboard-right {
+	min-width:50%;
+	background-color: blue;
+	float:left;
+	text-align: right;
+}
+
+.scoreboard .scoreboard-info {
+	width:40%;
+	margin: 10% auto;
+	text-align: center;
+}
+
+
+.scoreboard .scoreboard-break {
+	
+}
+
+.scoreboard .scoreboard-round {
+
+}
+
+
+.scoreboard .scoreboard-pause {
+	margin-left: auto ;
+	margin-right: auto ;
+
+	margin-bottom: 0 ;
+	color:black;
+	background: -webkit-linear-gradient(top, white, #777 90%);
+	background: linear-gradient(top, white, #777 90%);
+	display:flex;
+	text-align:center;
+
+	text-shadow: 4px 4px 8px #999;
+	box-shadow: 8px 8px 15px #000;
+}
+
+.scoreboard .scoreboard-penalty {
+
+}
+
+.scoreboard .scoreboard-round {
+
+}
+
+.scoreboard .scoreboard-left {
+	@include background(linear-gradient(red, black));
+
+}
+
+.scoreboard .scoreboard-right {
+	@include background(linear-gradient(blue, black));
+
+}
+
+.scoreboard .scoreboard-score {
+	text-align:center;
+	font-size:150%;
+	vertical-align:middle;
+	margin-right:auto;
+	margin-top:auto;
+	text-shadow: 8px 8px 15px #000;
+	position: relative;
+}

@@ -4,9 +4,31 @@
 angular.module('tkdApp.match')
 
 
-.controller('MatchListCtrl', ['$scope', '$state', 'MatchService',
-    function($scope, $state, MatchService) {
+.controller('MatchListCtrl', ['$scope', '$state', 'Socket', 'MatchService',
+    function($scope, $state, Socket, MatchService) {
         
+        Socket.on('newMatch', function(match) {
+            match = MatchService.generateNew(match)
+            MatchService.items.push(match);
+            $scope.matchList = MatchService.items;
+        });
+
+        Socket.on('deleteMatch', function(match) {
+            var index = MatchService.items.indexOf(match);
+            MatchService.items.splice(1, index);
+            $scope.matchList = MatchService.items;
+        });
+
+        Socket.on('updateMatch', function(match) {
+            console.log(MatchService.items);
+            _.forEach(MatchService.items, function(matchItem) {
+                if(matchItem._id === match._id) {
+                    MatchService.items[MatchService.items.indexOf(matchItem)] = match;
+                }
+            });
+            
+            $scope.matchList = MatchService.items;
+        });
 
         $scope.matchList = MatchService.items;
 
@@ -33,7 +55,7 @@ angular.module('tkdApp.match')
 
         $scope.onControls = function(e, row) {
             if(e) {e.stopPropagation();}
-            $state.go('match_controls', {
+            $state.go('match_master', {
                 match_id: row._id
             });
         };
@@ -57,11 +79,25 @@ angular.module('tkdApp.match')
     }
 ])
 
-.controller('MatchCtrl', ['$scope', '$state', 'resolved_match',
-    function($scope, $state, resolved_match) {
+.controller('MatchCtrl', ['$scope', '$state', 'Socket', 'resolved_match',
+    function($scope, $state, Socket, resolved_match) {
         
         $scope.match = resolved_match;
         
+        Socket.on('deleteMatch', function(match) {
+            if($scope.match._id === match._id) {
+                alert('Match has been deleted');
+                $state.go('front', {
+                    
+                });
+            }
+        });
+
+        Socket.on('updateMatch', function(match) {
+            if($scope.match._id === match._id) {
+                $scope.match === match;
+            }
+        });
 
         $scope.onTriggerUpdate = function(){
             if($scope.match._id) {
@@ -87,6 +123,21 @@ angular.module('tkdApp.match')
 .controller('MatchScoreboardCtrl', ['$scope', 'Socket', 'resolved_match',
     function($scope, Socket, resolved_match) {
         var beep = new Audio('sounds/beep1.wav');
+
+        Socket.on('deleteMatch', function(match) {
+            if($scope.match._id === match._id) {
+                alert('Match has been deleted');
+                $state.go('front', {
+                    
+                });
+            }
+        });
+
+        Socket.on('updateMatch', function(match) {
+            if($scope.match._id === match._id) {
+                $scope.match === match;
+            }
+        });
 
         $scope.match = resolved_match;
         $scope.timer = {
@@ -124,9 +175,25 @@ angular.module('tkdApp.match')
 ])
 
 
+
 .controller('MatchControlsCtrl', ['$scope', '$state', 'Socket', 'resolved_match',
     function($scope, $state, Socket, resolved_match) {
         var beep = new Audio('sounds/beep1.wav');
+
+        Socket.on('deleteMatch', function(match) {
+            if($scope.match._id === match._id) {
+                alert('Match has been deleted');
+                $state.go('front', {
+                    
+                });
+            }
+        });
+
+        Socket.on('updateMatch', function(match) {
+            if($scope.match._id === match._id) {
+                $scope.match === match;
+            }
+        });
 
         $scope.match = resolved_match;
         $scope.timer = {
@@ -137,6 +204,20 @@ angular.module('tkdApp.match')
 
         Socket.emit('join', {id:resolved_match._id});
 
+        Socket.on('roundtime', function(time){
+            $scope.timer.roundTimeMS = time.ms;
+            $scope.timer.pauseWatchMS = 0;
+        });
+
+        Socket.on('breaktime', function(time){
+            $scope.timer.breakTimeMS = time.ms;
+            $scope.timer.pauseWatchMS = 0;
+        });
+
+        Socket.on('pausetime', function(time){
+            $scope.timer.pauseWatchMS = time.ms;
+        });
+
         Socket.on('soundhorn', function() {
             beep.play();
         });
@@ -145,6 +226,7 @@ angular.module('tkdApp.match')
         Socket.on('match', function(match) {
             $scope.match = match;
         });
+
 
         $scope.edit = function(e) {
             e.stopPropagation();
@@ -166,19 +248,18 @@ angular.module('tkdApp.match')
 
         $scope.penalties = function(e, player, points) {
             e.stopPropagation();
-
             Socket.emit('penalties', {id:$scope.match._id, player: player, points:points});
         };
 
         $scope.reset = function(e) {
             e.stopPropagation();
-            Socket.emit('reset', {id:$scope.match._id});
+            Socket.emit('resetMatch', {id:$scope.match._id});
         };
 
         $scope.pauseResume = function(e) {
             e.stopPropagation();
             Socket.emit('pauseresume', {id:$scope.match._id});
-        }
+        };
 
         $scope.soundhorn = function(e) {
             e.stopPropagation();

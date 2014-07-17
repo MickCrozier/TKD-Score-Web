@@ -50,7 +50,7 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
 
         .state('match_scoreboard', {
             parent: 'match',
-            controller: 'MatchScoreboardCtrl',
+            controller: 'MatchControlsCtrl',
             url: '/scoreboard',
             templateUrl: 'views/match/scoreboard.html',
         })
@@ -60,6 +60,13 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
             controller: 'MatchControlsCtrl',
             url: '/controls',
             templateUrl: 'views/match/controls.html',
+        })
+
+        .state('match_master', {
+            parent: 'match',
+            controller: 'MatchControlsCtrl',
+            url: '/master',
+            templateUrl: 'views/match/match_master.html',
         });
 
     }]
