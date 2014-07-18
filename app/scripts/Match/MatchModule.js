@@ -120,6 +120,45 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
 
 
     }
+])
+
+/**
+ * @ngdoc filter
+ * @name formatPenalties
+ * @function
+ * 
+ * @description
+ * Converts number into html images
+ */
+.filter('formatPenalties', [
+
+    function() {
+        return function(num) {
+            var r = '';
+            var penalties = (num/2)
+            var filled = 0;
+            
+            for(var i = 0; i<Math.floor(penalties); i++) {
+                //r+= '&#x2588 ';
+                r+= '<img src="/images/mark_gamjeom.png" class="scoreboard-mark">'
+                filled++;
+            }
+            
+            if(Math.floor(num/2) != penalties && penalties !=0) {
+                //r+= '&#x2584 ' ;
+
+                r+= '<img src="/images/mark_kyongo.png" class="scoreboard-mark">';
+                filled++;
+            }
+            
+            while(filled < 4) {
+                //r+= '_ ' ;
+                r+= '<img src="/images/mark_blank.png" class="scoreboard-mark">';
+                filled++    
+            }
+            return r;
+        };
+    }
 ]);
 
 MatchModule.resolve_match = ['$q', '$stateParams', 'MatchService',

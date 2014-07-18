@@ -120,60 +120,6 @@ angular.module('tkdApp.match')
     }
 ])
 
-.controller('MatchScoreboardCtrl', ['$scope', 'Socket', 'resolved_match',
-    function($scope, Socket, resolved_match) {
-        var beep = new Audio('sounds/beep1.wav');
-
-        Socket.on('deleteMatch', function(match) {
-            if($scope.match._id === match._id) {
-                alert('Match has been deleted');
-                $state.go('front', {
-                    
-                });
-            }
-        });
-
-        Socket.on('updateMatch', function(match) {
-            if($scope.match._id === match._id) {
-                $scope.match === match;
-            }
-        });
-
-        $scope.match = resolved_match;
-        $scope.timer = {
-            roundTimeMS: resolved_match.roundTimeMS,
-            breakTimeMS: resolved_match.breakTimeMS,
-            pauseWatchMS: 0,
-        };
-
-        Socket.emit('join', {id:resolved_match._id});
-        
-        Socket.on('roundtime', function(time){
-            $scope.timer.roundTimeMS = time.ms;
-            $scope.timer.pauseWatchMS = 0;
-        });
-
-        Socket.on('breaktime', function(time){
-            $scope.timer.breakTimeMS = time.ms;
-            $scope.timer.pauseWatchMS = 0;
-        });
-
-        Socket.on('pausetime', function(time){
-            $scope.timer.pauseWatchMS = time.ms;
-        });
-
-        Socket.on('soundhorn', function() {
-            beep.play();
-        });
-
-
-        Socket.on('match', function(match) {
-            $scope.match = match;
-        });
-
-    }
-])
-
 
 
 .controller('MatchControlsCtrl', ['$scope', '$state', 'Socket', 'resolved_match',
