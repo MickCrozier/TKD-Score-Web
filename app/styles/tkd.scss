@@ -1,6 +1,11 @@
+.controls {
+
+}
+
 .scoreboard-mini {
 	text-align: center;
 	margin: auto 0;
+	padding: 0;
 	background: black;
 	color: white;
 	font-size: 20px;
@@ -69,7 +74,7 @@
 
 .scoreboard-mini .scoreboard-score {
 	text-align:center;
-	font-size:180%;
+	font-size:50px;
 	vertical-align:middle;
 	margin-right:auto;
 	margin-top:auto;
@@ -78,9 +83,16 @@
 }
 
 .scoreboard-mini .scoreboard-mark {
-	height: 4vw;
-	width: 3vw;
+	height: 40px;
+	width: 30px;
 }
+
+
+
+
+
+
+
 
 
 

@@ -18,7 +18,7 @@
 			</div>
 
 
-			<button type="button" ng-click="onRemoveClick($event)" class="btn btn-danger btn-xs pull-right" tooltip="Delete asset">	
+			<button type="button" ng-click="onRemoveClick($event)" class="btn btn-danger btn-xs pull-right" tooltip="Delete Match">	
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
 
@@ -78,6 +78,24 @@
 		</td>
 		<td class="">
 			<span class="h4" editable-text="match.breakLengthMS" buttons="yes">{{match.breakLengthMS || 'Default'}}</span>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Num Judges Agree
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.agree" buttons="yes">{{match.agree || 'Default'}}</span>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="">
+			Judge Score Timeout
+		</td>
+		<td class="">
+			<span class="h4" editable-text="match.scoreTimeout" buttons="yes">{{match.scoreTimeout || 'Default'}}</span>
 		</td>
 	</tr>
 	

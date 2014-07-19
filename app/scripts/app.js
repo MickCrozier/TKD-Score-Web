@@ -59,6 +59,8 @@ angular.module('tkdApp', [
         
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
+        FastClick.attach(document.body);
+
         
 
         ////////////////////////////////////////////////////////
