@@ -21,6 +21,13 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  var sftpConfig = {};
+
+  try{
+    sftpConfig = require('./sftp-config.js');
+  } catch(e) {
+  };
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -380,7 +387,8 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
-            'fonts/*'
+            'fonts/*',
+            'sounds/*.{wav, mp3}'
           ]
         }, {
           expand: true,
@@ -423,7 +431,11 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
-    }
+    },
+
+    'sftp-deploy': {
+        staging: sftpConfig.staging || {},
+      }
   });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -470,7 +482,7 @@ module.exports = function (grunt) {
     'cdnify',
     'cssmin',
     'uglify',
-    'filerev',
+    //'filerev',
     'usemin',
     'htmlmin'
   ]);
@@ -480,6 +492,9 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  
+  grunt.registerTask('deploy:staging', 'Deploys to staging server', ['sftp-deploy:staging']);
 
 
   grunt.registerTask('test', 'Runs tests', function (target) {

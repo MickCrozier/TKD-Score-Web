@@ -2,4 +2,6 @@ node_modules
 dist
 .tmp
 .sass-cache
+.ftppass
 bower_components
+.sftp-config.ja
