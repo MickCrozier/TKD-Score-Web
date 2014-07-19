@@ -21,6 +21,7 @@
   "globals": {
     "angular": false,
     "_": false,
-    "alert": false
+    "alert": false,
+    "FastClick": false
   }
 }

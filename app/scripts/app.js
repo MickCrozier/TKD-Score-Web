@@ -46,10 +46,10 @@ angular.module('tkdApp', [
             templateUrl: 'views/main.html',
             controller: 'MainCtrl'
         });
-        
 
     }
 ])
+
 
 
 .run(['$log', '$rootScope', '$state', '$stateParams', 'editableOptions',
@@ -60,9 +60,7 @@ angular.module('tkdApp', [
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
         FastClick.attach(document.body);
-
         
-
         ////////////////////////////////////////////////////////
         // THIS IS WHERE THE GLOBAL CODE GOES
 

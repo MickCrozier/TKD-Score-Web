@@ -1,4 +1,10 @@
-<div class="row">
-<div ng-include="'views/match/controls.html'" class="col-sm-6" ></div>
-<div ng-include="'views/match/miniboard.html'" class="col-sm-6" ></div>
+<div>
+<h1>TKD Score</h1>
+Match: {{match._id}} | {{match.player1}} vs. {{match.player2}}
 </div>
+
+
+<div ng-include="'views/match/miniboard.html'"></div>
+
+<div ng-include="'views/match/controls.html'"></div>
+

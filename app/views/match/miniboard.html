@@ -1,16 +1,16 @@
-<div class="scoreboard-mini">
+<div class="container-fluid scoreboard-mini">
 	<div class="row">
 
-		<div class="col-xs-4 scoreboard-break">
+		<div class="col-xs-4 scoreboard-break-timer">
 			<div ng-show="timer.breakTimeMS < match.breakTimeMS" ng-bind="timer.breakTimeMS | formatTime:true">
 			</div>
 		</div>
 
-		<div class="col-xs-4 scoreboard-round" ng-bind="timer.roundTimeMS | formatTime:true">
+		<div class="col-xs-4 scoreboard-round-timer" ng-bind="timer.roundTimeMS | formatTime:true">
 
 		</div>
 
-		<div class="col-xs-4 scoreboard-pause" ng-show="timer.pauseWatchMS > 0" ng-bind="timer.pauseWatchMS | formatTime:false">
+		<div class="col-xs-4 scoreboard-pause-timer" ng-show="timer.pauseWatchMS > 0" ng-bind="timer.pauseWatchMS | formatTime:false">
 		</div>
 	</div>
 
@@ -18,7 +18,8 @@
 		<div class="col-xs-5 scoreboard-penalty" ng-bind-html="match.player1Penalties | formatPenalties">
 		</div>
 
-		<div class="col-xs-2 scoreboard-round" ng-bind="match.round">
+		<div class="col-xs-2 scoreboard-round">
+			R{{match.round}}
 		</div>
 
 		<div class="col-xs-5 scoreboard-penalty" ng-bind-html="match.player2Penalties | formatPenalties">

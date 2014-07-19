@@ -1,9 +1,13 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+
+$grid-gutter-width: 0px;
+
 // bower:scss
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 
 @import "compass/css3/images";
+@import "compass/css3/filter";
 @import "tkd.scss";
 
 
@@ -15,16 +19,15 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 }
 
 
-
-
-
 .btn-fill {
   width:100%;
 }
 
 .padding-5 {
-  padding: 5px !important;
+  //padding: 5px !important;
 }
+
+
 
 
 
@@ -36,6 +39,7 @@ html, body {
   height:100%;
   width:100%;
   margin: 0;
+  background: black;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -90,10 +94,10 @@ html, body {
   }
 }
 
-/* Responsive: Portrait tablets and up */
+
 @media screen and (min-width: 768px) {
   .container {
-    max-width: 730px;
+    max-width: 768px;
   }
 
   /* Remove the padding we set earlier */
