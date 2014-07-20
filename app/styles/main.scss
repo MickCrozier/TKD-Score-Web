@@ -1,13 +1,16 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
-$grid-gutter-width: 0px;
+@import "compass/css3/images";
+@import "compass/css3/filter";
+@import "compass/css3/user-interface";
+@import "theme.scss";
+
 
 // bower:scss
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 
-@import "compass/css3/images";
-@import "compass/css3/filter";
+
 @import "tkd.scss";
 
 
@@ -23,9 +26,7 @@ $grid-gutter-width: 0px;
   width:100%;
 }
 
-.padding-5 {
-  //padding: 5px !important;
-}
+
 
 
 
@@ -39,7 +40,6 @@ html, body {
   height:100%;
   width:100%;
   margin: 0;
-  background: black;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

@@ -11,4 +11,4 @@ module.exports = {
       exclusions: ['.DS_Store'],
       server_sep: '/'
   }
-}
+};

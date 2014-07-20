@@ -1,0 +1,15 @@
+<div id="main" name="main" class="scoreboard">
+	<div id='scorechong'  class="scoreboard-left">
+		<div id='scorechong-head' class="scoreboard-score-zone" ng-click="onJudge($event, 1, 'head')">Head</div>
+		<div id='scorechong-body' class="scoreboard-score-zone" ng-click="onJudge($event, 1, 'body')">Body</div>
+	</div>
+	<div id='scorehong' class="scoreboard-right">
+		<div id='scorehong-head' class="scoreboard-score-zone" ng-click="onJudge($event, 2, 'head')">Head</div>
+		<div id='scorehong-body' class="scoreboard-score-zone" ng-click="onJudge($event, 2, 'body')">Body</div>
+	</div>
+
+
+	<div style="position:absolute;width:100%; top:0; pointer-events:none;">
+		<div id="displaylogo" class="scoreboard-logo"></div>
+	</div>
+</div>

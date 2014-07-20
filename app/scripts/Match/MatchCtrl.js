@@ -53,6 +53,15 @@ angular.module('tkdApp.match')
             });
         };
 
+        $scope.onJudge = function(e, row) {
+            if(e) {e.stopPropagation();}
+            $state.go('match_judge', {
+                match_id: row._id
+            });
+        };
+
+
+
         $scope.onControls = function(e, row) {
             if(e) {e.stopPropagation();}
             $state.go('match_master', {
@@ -217,6 +226,25 @@ angular.module('tkdApp.match')
             Socket.emit('soundhorn', {id:$scope.match._id});
         };
 
+
+
+        $scope.onJudge = function(e, player, target) {
+            if(e) {e.stopPropagation();}
+
+            // TODO
+            // Set timeout for repeats presses - then call sendJudgeScore when done
+        };
+
+
+
+
+        var sendJudgeScore = function(player, points) {
+            Socket.emit('registerscore', {
+                match_id: row._id,
+                player: player,
+                points: points
+            });
+        };
 
 
         var editMatch = function(match) {

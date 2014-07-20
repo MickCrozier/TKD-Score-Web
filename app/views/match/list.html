@@ -1,7 +1,7 @@
 
 <h1>TKD Score</h1>
 
-<button type="button" ng-click="onAdd($event)">Add</button>
+<button type="button" class="btn btn-lg btn-primary" ng-click="onAdd($event)">Add</button>
 <div class="container-fluid">
 
 	<table class="table table-hover">
@@ -33,6 +33,9 @@
 				</button>
 				<button ng-click="onScoreboard($event, row)" class="btn btn-primary btn-md">
 				<span class="glyphicon glyphicon-eye-open"></span>
+				</button>
+				<button ng-click="onJudge($event, row)" class="btn btn-primary btn-md">
+				<span class="glyphicon glyphicon-hand-up"></span>
 				</button>
 
 				<button ng-click="onRemove($event, row)" class="btn btn-danger btn-md">

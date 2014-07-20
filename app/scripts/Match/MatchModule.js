@@ -67,7 +67,14 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
             controller: 'MatchControlsCtrl',
             url: '/master',
             templateUrl: 'views/match/match_master.html',
-        });
+        })
+
+        .state('match_judge', {
+            parent: 'match',
+            controller: 'MatchControlsCtrl',
+            url: '/judge',
+            templateUrl: 'views/match/judge.html',
+        });;
 
     }]
 )

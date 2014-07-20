@@ -26,7 +26,7 @@ module.exports = function (grunt) {
   try{
     sftpConfig = require('./sftp-config.js');
   } catch(e) {
-  };
+  }
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -36,6 +36,9 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+      options: {
+        spawn: false,
+      },
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
