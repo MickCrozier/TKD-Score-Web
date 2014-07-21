@@ -134,8 +134,9 @@ angular.module('tkdApp.match')
     }
 ])
 
-.controller('MatchControlsCtrl', ['$scope', '$state', '$modal', 'Socket', 'resolved_match',
-    function($scope, $state, $modal, Socket, resolved_match) {
+
+.controller('MatchControlsCtrl', ['$scope', '$state', '$stateParams', '$modal', 'Socket', 'resolved_match',
+    function($scope, $state, $stateParams, $modal, Socket, resolved_match) {
         var beep = new Audio('sounds/beep1.wav');
 
         Socket.on('deleteMatch', function(match) {
@@ -160,7 +161,9 @@ angular.module('tkdApp.match')
             pauseWatchMS: 0,
         };
 
-        Socket.emit('join', {id:resolved_match._id});
+        var viewType = $state.current.name; // match_master, match_scoreboard, match_controls, match_judge
+
+        Socket.emit('join', {id:resolved_match._id, viewType:viewType});
 
         Socket.on('roundtime', function(time){
             $scope.timer.roundTimeMS = time.ms;
