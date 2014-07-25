@@ -4,11 +4,11 @@
 angular.module('tkdApp.match')
 
 
-.controller('MatchListCtrl', ['$scope', '$state', 'Socket', 'MatchService',
-    function($scope, $state, Socket, MatchService) {
+.controller('MatchListCtrl', ['$scope', '$state', 'Socket', 'MatchService', 'ModalMsg',
+    function($scope, $state, Socket, MatchService, ModalMsg) {
         
         Socket.on('newMatch', function(match) {
-            match = MatchService.generateNew(match)
+            match = MatchService.generateNew(match);
             MatchService.items.push(match);
             $scope.matchList = MatchService.items;
         });
@@ -82,13 +82,18 @@ angular.module('tkdApp.match')
         $scope.onRemove = function(e, row) {
             if(e) {e.stopPropagation();}
 
-            row.remove().then(function success() {
-                var index = MatchService.items.indexOf(row);
-                MatchService.items.splice(index, 1); // remove local copy without reloading from server
-                $scope.matchList = MatchService.items;
-            }, function fail() {
+            ModalMsg.areYouSure('Are you sure you want to delete this match?', function(){
+                row.remove().then(function success() {
+                    var index = MatchService.items.indexOf(row);
+                    MatchService.items.splice(index, 1); // remove local copy without reloading from server
+                    $scope.matchList = MatchService.items;
+                }, function fail() {
 
+                });
+            }, function(){
+                //cancel
             });
+            
         };
     }
 ])
@@ -231,6 +236,8 @@ angular.module('tkdApp.match')
 
 
 
+
+        ///// TODO //////
         $scope.onJudge = function(e, player, target) {
             if(e) {e.stopPropagation();}
 
@@ -239,15 +246,14 @@ angular.module('tkdApp.match')
         };
 
 
-
-
         var sendJudgeScore = function(player, points) {
             Socket.emit('registerscore', {
-                match_id: row._id,
+                match_id: $stateParams.match_id,
                 player: player,
                 points: points
             });
         };
+        ////////////////
 
 
         var editMatch = function(match) {
