@@ -4,4 +4,4 @@ dist
 .sass-cache
 .ftppass
 bower_components
-.sftp-config.ja
+sftp-config.js
