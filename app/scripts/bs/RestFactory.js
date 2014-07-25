@@ -3,12 +3,20 @@
 
     
     
-    var factory = ['$timeout', '$q', 'Restangular', function($timeout, $q, Restangular){
+    angular.module('bs.common')
+
+    .config(function(RestangularProvider) {
+        RestangularProvider.setBaseUrl('/api');
+        RestangularProvider.setParentless(true);
+        RestangularProvider.setRestangularFields({
+          id: '_id',
+        });
+    })
+
+    .factory('RestFactory', ['$timeout', '$q', 'Restangular', function($timeout, $q, Restangular){
         
         var f = function(args) {
             this.MAX_FIND_RECORDS_LIMIT = 10000;
-
-
             this._parent = args.parent || null;
 
             if(!args.path) {throw new Error('path is required for new RestFactory');}
@@ -59,7 +67,8 @@
             var defer = $q.defer();
             if(!searchParams) {searchParams = {};}
             searchParams.limit = searchParams.limit || this._findRecordLimit;
-            //this._parent.getList(this._pathString, searchParams).then(function success(items) {
+            // TODO need to lock search to parent!
+
             Restangular.all(this._pathString, searchParams).getList().then(function success(items) {
                 defer.resolve(items);
             }, function fail(err) {
@@ -90,16 +99,11 @@
             return l;
         };
 
-        
 
         return f;
         
-    }];
+    }]);
 
-
-///////////// END MODEL //////////////////
-
-/* register model factory with angular */
-    angular.module('bs.common').factory('RestFactory', factory);
+  
 
 })();

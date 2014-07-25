@@ -1,3 +1,7 @@
+
+@import "compass/css3/user-interface";
+@import "compass/css3/images";
+
 @mixin scoreboard-white-timer {
 	@include background(linear-gradient(white, #777));
 	color:black;
@@ -5,6 +9,7 @@
 	text-shadow: 4px 4px 8px #999;
 	box-shadow: 8px 8px 15px #000;
 }
+
 
 .controls {
 

@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('bs.common', ['ui.bootstrap', 'btford.socket-io'])
+angular.module('bs.common', [
+    'ui.bootstrap',
+    'restangular',
+    'btford.socket-io'
+])
 
 .service('ModalMsg', ['$modal',
     function($modal) {

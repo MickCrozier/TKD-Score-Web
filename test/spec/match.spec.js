@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 
@@ -8,7 +9,7 @@ var mockMatchList = [
 describe('Match', function () {
 
   // load the controller's module
-  beforeEach(module('tkdApp'));
+  beforeEach(module('tkdApp.match'));
 
   var MatchService, $httpBackend;
 
@@ -17,8 +18,6 @@ describe('Match', function () {
     beforeEach(inject(function (_MatchService_, _$httpBackend_) {
       MatchService = _MatchService_;
       $httpBackend = _$httpBackend_;
-
-      $httpBackend.when('GET', new RegExp('html')).respond(''); // WHY IS IT LOADING THE HTML FILES???
 
     }));
 
@@ -42,3 +41,5 @@ describe('Match', function () {
   });
 
 });
+
+})();

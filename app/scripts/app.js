@@ -25,13 +25,7 @@ angular.module('tkdApp', [
 ])
 
 
-.config(function(RestangularProvider) {
-    RestangularProvider.setBaseUrl('/api');
-    RestangularProvider.setParentless(true);
-    RestangularProvider.setRestangularFields({
-      id: '_id',
-    });
-})
+
 
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
     function($stateProvider, $urlRouterProvider, $locationProvider) {

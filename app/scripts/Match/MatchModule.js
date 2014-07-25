@@ -3,7 +3,9 @@
 
 
 var MatchModule = angular.module('tkdApp.match', [ // list dependancies
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui.router',
+    'bs.common'
 ])
 
 .config(['$stateProvider',
@@ -74,7 +76,7 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
             controller: 'MatchControlsCtrl',
             url: '/judge',
             templateUrl: 'views/match/judge.html',
-        });;
+        });
 
     }]
 )
@@ -142,16 +144,16 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
     function() {
         return function(num) {
             var r = '';
-            var penalties = (num/2)
+            var penalties = (num/2);
             var filled = 0;
             
             for(var i = 0; i<Math.floor(penalties); i++) {
                 //r+= '&#x2588 ';
-                r+= '<img src="/images/mark_gamjeom.png" class="scoreboard-mark">'
+                r+= '<img src="/images/mark_gamjeom.png" class="scoreboard-mark">';
                 filled++;
             }
             
-            if(Math.floor(num/2) != penalties && penalties !=0) {
+            if(Math.floor(num/2) !== penalties && penalties !== 0) {
                 //r+= '&#x2584 ' ;
 
                 r+= '<img src="/images/mark_kyongo.png" class="scoreboard-mark">';
@@ -161,7 +163,7 @@ var MatchModule = angular.module('tkdApp.match', [ // list dependancies
             while(filled < 4) {
                 //r+= '_ ' ;
                 r+= '<img src="/images/mark_blank.png" class="scoreboard-mark">';
-                filled++    
+                filled++;    
             }
             return r;
         };
