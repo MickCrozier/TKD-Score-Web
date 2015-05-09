@@ -37,14 +37,15 @@ module.exports = function (grunt) {
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       options: {
-        spawn: false,
+        spawn: true,
+        interrupt: true,
       },
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
       }, 
       js: {
-        files: grunt.option('notests') ? ['notests/'] : ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: grunt.option('notests') ? ['notests/'] : ['app/{,*/}*.js'],
         tasks: ['newer:jshint:all', 'karma'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -55,7 +56,7 @@ module.exports = function (grunt) {
         tasks: ['newer:jshint:test', 'karma'],
       },
       compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        files: ['app/**/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
       gruntfile: {
@@ -66,9 +67,9 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
+          'app/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          'app/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -86,12 +87,12 @@ module.exports = function (grunt) {
         {
           context: '/api',
           host: '0.0.0.0',
-          port: 3000
+          port: 1337
         },
         {
           context: '/socket.io', //will need to update this later
           host: '0.0.0.0',
-          port: 3000
+          port: 1337
         },
       ],
 
@@ -121,6 +122,7 @@ module.exports = function (grunt) {
           }
         }
       },
+      
       test: {
         options: {
           port: 9001,
@@ -164,7 +166,7 @@ module.exports = function (grunt) {
       all: {
         src: [
           'Gruntfile.js',
-          '<%= yeoman.app %>/scripts/{,*/}*.js'
+          'app/{,*/}*.js'
         ]
       },
       test: {
@@ -208,14 +210,14 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     wiredep: {
       options: {
-        cwd: '<%= yeoman.app %>'
+        cwd: '<%= yeoman.app %>/../'
       },
       app: {
-        src: ['<%= yeoman.app %>/index.html'],
+        src: ['app/index.html'],
         ignorePath:  /..\//
       },
       sass: {
-        src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        src: ['app/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
       },
     },
@@ -223,11 +225,11 @@ module.exports = function (grunt) {
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
+        sassDir: 'app/styles',
         cssDir: '.tmp/styles',
         generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
+        imagesDir: 'app/images',
+        javascriptsDir: 'app/',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
         importPath: './bower_components',
         httpImagesPath: '/images',
@@ -253,7 +255,7 @@ module.exports = function (grunt) {
     filerev: {
       dist: {
         src: [
-          '<%= yeoman.dist %>/scripts/{,*/}*.js',
+          '<%= yeoman.dist %>/{,*/}*.js',
           '<%= yeoman.dist %>/styles/{,*/}*.css',
           '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
           '<%= yeoman.dist %>/styles/fonts/*'
@@ -428,6 +430,25 @@ module.exports = function (grunt) {
       ]
     },
 
+    ngdocs: {
+      options: {
+
+        html5Mode: false,
+        scripts: ['angular.js'],
+      },
+
+      all: ['app/scripts/app.js', 'app/scripts/**/*.js'],
+    },
+
+    docular: {
+        useHtml5Mode: false, //Use angular's html5 mode? true/false.
+        docular_webapp_target: '/docs', //The place where the docs will be generated
+        showAngularDocs: false,
+        showDocularDocs: false,
+        examples: {}, //instructions for how to run the sandboxed examples
+        groups: [] //groups of documentation to parse
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -489,6 +510,8 @@ module.exports = function (grunt) {
     'usemin',
     'htmlmin'
   ]);
+
+
 
   grunt.registerTask('default', [
     'newer:jshint',

@@ -19,7 +19,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
 
-      'bower_components/fastclick/lib/fastclick.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-animate/angular-animate.js',
@@ -30,17 +30,34 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/lodash/dist/lodash.compat.js',
-      'bower_components/restangular/dist/restangular.js',
       'bower_components/angular-xeditable/dist/js/xeditable.js',
-      'bower_components/angular-socket-io/socket.js',
-      
-      'app/scripts/*.js',
-      'app/scripts/**/*Module.js',
-      'app/scripts/**/*Mdl.js',
-      'app/scripts/**/*Ctrl.js',
-      'app/scripts/**/*.js',
-      'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'bower_components/angular-inflector/dist/angular-inflector.min.js',
+      'bower_components/angular-restmod/dist/angular-restmod.min.js',
+
+      'bower_components/angular-ui-select/dist/select.js',
+      'bower_components/raf/index.js',
+      'bower_components/angular-ui-layout/ui-layout.js',
+      'bower_components/jquery-ui/ui/jquery-ui.js',
+      'bower_components/angular-ui-date/src/date.js',
+      'bower_components/fullcalendar/fullcalendar.js',
+      'bower_components/angular-ui-calendar/src/calendar.js',
+      'bower_components/eventEmitter/EventEmitter.js',
+      'bower_components/angular-ui-grid/ui-grid.js',
+      'bower_components/pdfmake/build/pdfmake.js',
+      'bower_components/moment/moment.js',
+      'bower_components/ng-tags-input/ng-tags-input.min.js',
+      'bower_components/angular-rt-popup/dist/angular-rt-popup.js',
+      'bower_components/raf/index.js',
+      'bower_components/ngDialog/js/ngDialog.js',
+
+      'bower_components/ng-tags-input/ng-tags-input.js',
+
+      'app/core/app.js',
+      'app/bsol/CommonModule.js',
+      'app/*.js',
+      'app/**/*.js',
+      'test/mock/*.js',
+      'test/spec/*.js'
     ],
 
     // list of files / patterns to exclude

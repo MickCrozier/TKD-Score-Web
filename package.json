@@ -1,7 +1,7 @@
 {
-  "name": "tvur",
+  "name": "Sockettest",
   "version": "0.0.0",
-  "repository": "https://bitbucket.org/backstagesolutions/tvur-front.git",
+  "repository": "",
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
@@ -22,6 +22,7 @@
     "grunt-google-cdn": "^0.4.0",
     "grunt-karma": "^0.8.3",
     "grunt-newer": "^0.7.0",
+    "grunt-ngdocs": "^0.2.4",
     "grunt-ngmin": "^0.0.3",
     "grunt-protractor-runner": "^1.0.0",
     "grunt-sftp-deploy": "^0.2.0",
@@ -30,15 +31,11 @@
     "grunt-wiredep": "^1.8.0",
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.16",
-    "karma-chai": "^0.1.0",
-    "karma-chai-plugins": "^0.2.1",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.2.2",
-    "karma-mocha": "^0.1.4",
     "karma-mocha-reporter": "^0.2.6",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": "^0.4.0",
-    "mocha": "^1.20.1",
     "time-grunt": "^0.3.1"
   },
   "engines": {
@@ -46,8 +43,5 @@
   },
   "scripts": {
     "test": "grunt test"
-  },
-  "dependencies": {
-    "karma-jasmine": "^0.1.5"
   }
 }

@@ -1,0 +1,28 @@
+
+<!-- HOW DO WE DISPLAY THE FIELDS FROM OUR bsolListkeys ONLY for brand new data entry!!??? -->
+
+<table>
+	<thead>
+	<tr>
+		<th ng-repeat="key in bsolListkeys">{{key}}</th>
+	</tr>
+	</thead>
+	<tbody>
+
+	<tr>
+		<form name="newForm">
+		<td	ng-repeat="key in bsolListkeys">
+			<input type="text" ng-model="newItem[key]">
+		</td>
+		</form>
+	</tr>
+	</tbody>
+</table>
+
+<button ng-click="onAddClick($event)" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-plus"></span>Add
+</button>
+<button ng-click="onCancelClick($event)" class="btn btn-warning btn-sm">
+	<span class="glyphicon glyphicon-close"></span>Cancel
+</button>
+
