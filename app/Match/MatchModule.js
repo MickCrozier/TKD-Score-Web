@@ -40,6 +40,12 @@
                 parent:'match',
             })
 
+            .state('scoreboard', {
+                url: '/scordboard',
+                template: '<scoreboard match="MatchController.match"></scoreboard>',
+                parent:'match',
+            })
+
 
 
             
@@ -62,12 +68,12 @@
 
 
         ms.changeRound = function(id, val) {
-            $sailsSocket.post('/api/match/controls/changeRound', {id:id, value:$scope.match.round + val})
+            $sailsSocket.post('/api/match/controls/changeRound', {id:id, value:val})
             .success(function(resp) {
 
             })
             .error(function(resp) {
-                console.log.error('controls error', resp);
+                console.error('controls error', resp);
             })
         }
 
@@ -77,7 +83,7 @@
 
             })
             .error(function(resp) {
-                console.log.error('controls error', resp);
+                console.error('controls error', resp);
             })
         }
 
@@ -87,17 +93,17 @@
 
             })
             .error(function(resp) {
-                console.log.error('controls error', resp);
+                console.error('controls error', resp);
             })
         }
 
-        ms.reset = function (id) {
-            $sailsSocket.post('/api/match/controls/reset', {id:id})
+        ms.resetMatch = function (id) {
+            $sailsSocket.post('/api/match/controls/resetMatch', {id:id})
             .success(function(resp) {
 
             })
             .error(function(resp) {
-                console.log.error('controls error', resp);
+                console.error('controls error', resp);
             })
         }
 
@@ -107,21 +113,24 @@
 
             })
             .error(function(resp) {
-                console.log.error('controls error', resp);
+                console.error('controls error', resp);
             })
         }
 
         
 
-        ms.soundhorn = function (id) {
+        ms.soundHorn = function (id) {
+         
             $sailsSocket.post('/api/match/controls/soundhorn', {id:id})
             .success(function(resp) {
 
             })
             .error(function(resp) {
-                console.log.error('controls error', resp);
+                console.error('controls error', resp);
             })
         }
+
+        
 
         return ms;
 
@@ -147,7 +156,94 @@
     }])
 
 
+    /**
+     * @ngdoc filter
+     * @name formatTime
+     * @function
+     * 
+     * @description
+     * To a millisecon value - returns minutes and seconds
+     * isCountDown adds 999 milliseconds to display - to 0 is triggered when it changes to 0
+     * rather than 1 second later
+     */
+    .filter('formatTime', [
 
+        function() {
+            return function(rawtime, isCountDown) {
+
+                var adjustedTime = rawtime;
+                // when counting down need to add time on the display so that timers will appear to stop SMACK ON 00:00
+                if(isCountDown) { 
+                  adjustedTime = rawtime + 999; 
+                }
+
+                var ds = Math.round(adjustedTime/100) + '';
+                var sec = Math.floor(adjustedTime/1000);
+                var min = Math.floor(adjustedTime/60000);
+                ds = ds.charAt(ds.length - 1);
+
+                sec = sec - 60 * min + '';
+
+                if(sec.charAt(sec.length - 2) !== '') {
+                  sec = sec.charAt(sec.length - 2) + sec.charAt(sec.length - 1);
+                } else {
+                  sec = 0 + sec.charAt(sec.length - 1);
+                } 
+                min = min + '';
+
+                if(min.charAt(min.length - 2) !== '')
+                {
+                  min = min.charAt(min.length - 2)+min.charAt(min.length - 1);
+                } else {
+                  min = 0 + min.charAt(min.length - 1);
+                }
+                //return min + ':' + sec + ':' + ds;
+                return min + ':' + sec;
+            };
+
+
+        }
+    ])
+
+    /**
+     * @ngdoc filter
+     * @name formatPenalties
+     * @function
+     * 
+     * @description
+     * Converts number into html images
+     */
+    .filter('formatPenalties', [
+
+        function() {
+            return function(num) {
+                var r = '';
+                var penalties = (num/2);
+                var filled = 0;
+                
+                for(var i = 0; i<Math.floor(penalties); i++) {
+                    //r+= '&#x2588 ';
+                    r+= '<img src="/images/mark_gamjeom.png" class="scoreboard-mark">';
+                    filled++;
+                }
+                
+                if(Math.floor(num/2) !== penalties && penalties !== 0) {
+                    //r+= '&#x2584 ' ;
+
+                    r+= '<img src="/images/mark_kyongo.png" class="scoreboard-mark">';
+                    filled++;
+                }
+
+                
+                while(filled < 4) {
+                    //r+= '_ ' ;
+                    r+= '<img src="/images/mark_blank.png" class="scoreboard-mark">';
+                    filled++;    
+                }
+                return r;
+            };
+        }
+    ])
 
     .directive('matchList', [function(){
         return {
@@ -173,10 +269,15 @@
                     $state.go('match', {matchId:match.id})
                 }
 
+                function gotoScoreboard(match) {
+                    $state.go('scoreboard', {matchId:match.id})
+                }
+
                 this.matches = MatchManager.get();
                 this.openEdit = MatchUI.openEdit;
 
                 this.gotoControls = gotoControls;
+                this.gotoScoreboard = gotoScoreboard;
                 this.gotoMatch = gotoMatch;
                 this.newMatch = newMatch;
                 this.destroy = destroy;
@@ -299,7 +400,7 @@
                 }
 
                 function changeRound(val) {
-                    Match.changRound(this.match.id, val);
+                    Match.changeRound(this.match.id, this.match.round + val);
                 };
 
                 function points(player, points) {
@@ -310,8 +411,8 @@
                     Match.penalties(this.match.id, player, points);
                 };
 
-                function reset() {
-                    Match.reset(this.match.id);
+                function resetMatch() {
+                    Match.resetMatch(this.match.id);
                 };
 
                 function pauseResume() {
@@ -325,9 +426,10 @@
                 this.edit = MatchUI.openEdit;
                 this.points = points;
                 this.penalties = penalties;
-                this.reset = reset;
+                this.resetMatch = resetMatch;
                 this.pauseResume = pauseResume;
                 this.soundHorn = soundHorn;
+                this.changeRound = changeRound;
 
             
             }],
@@ -340,7 +442,71 @@
         };
     }])
 
- 
+    .directive('scoreboard', [ function(){
+        // Runs during compile
+        return {
+            // name: '',
+            // priority: 1,
+            // terminal: true,
+            scope: {
+                match: '=',
+            }, // {} = isolate, true = child, false/undefined = no change
+            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+            restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
+            templateUrl: 'match/views/template-scoreboard.html',
+            controllerAs: 'scoreboardVm',
+            controller: ['$scope', '$sailsSocket', 'AlertService', 'Match', 'MatchUI', function($scope, $sailsSocket, AlertService, Match, MatchUI){
+                var self = this;
+                var horn = new Audio('sounds/beep1.wav');
+
+                if(angular.isNumber($scope.match)) {
+                    // if it's ID - get the relevant data
+                    this.match = Match.findOne($scope.match);
+                } else {
+                    // if not - assume it is the item and work with it directly
+                    this.match = $scope.match;
+                }
+
+                this.timer = {
+                    roundTimeMS: this.match.roundTimeMS,
+                    breakTimeMS: this.match.breakTimeMS,
+                    pauseWatchMS: 0,
+                };
+
+                $sailsSocket.subscribe('roundtime', function(resp) {
+                    self.timer.roundTimeMS = resp.ms;
+                });
+
+                $sailsSocket.subscribe('pausetime', function(resp) {
+                    self.timer.pauseWatchMS = resp.ms;
+                });
+
+                $sailsSocket.subscribe('breaktime', function(resp) {
+                    self.timer.breakTimeMS = resp.ms;
+                });
+
+                $sailsSocket.subscribe('soundhorn', function(resp) {
+                    console.log('HOOORRRRNN!');
+                    horn.play();
+                });
+
+                $sailsSocket.subscribe('match', function(resp) {
+                    console.log(resp.data);
+                });
+
+
+
+
+            
+            }],
+
+            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
+            link: function($scope, iElm, iAttrs, controller) {
+
+                
+            }
+        };
+    }])
 
     .service('MatchService', ['Match', function(Match) {
         this.Model = Match;

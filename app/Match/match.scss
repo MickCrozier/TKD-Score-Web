@@ -11,6 +11,7 @@
 }
 
 
+
 .controls {
 
 	@include user-select(none);
@@ -129,47 +130,6 @@
 	@include user-select(none);
 }
 
-.scoreboard .scoreboard-right {
-	color: white;
-	background: -webkit-linear-gradient(top, blue 50%, black);
-	background: linear-gradient(top, blue 50%, black);
-	width:50%;
-	height:100%;
-	float:left;
-	position:relative;
-	display:block;
-}
-
-.scoreboard .scoreboard-right:active {
-	color: white;
-	background: -webkit-linear-gradient(top, #55f 50%, #222);
-	background: linear-gradient(top, #55f 50%, #222);
-	width:50%;
-	height:100%;
-	float:left;
-	position:relative;
-	display:block;
-}
-
- .scoreboard .scoreboard-left {
-	color: white;
-	background: -webkit-linear-gradient(top, red 50%, black);
-	background: linear-gradient(top, red 50%, black);
- 	width:50%;
- 	height:100%;
- 	float:left;
- 	position:relative;
-}
-
-.scoreboard .scoreboard-left:active {
-	color: white;
-	background: -webkit-linear-gradient(top, #f55 50%, #222);
-	background: linear-gradient(top, #f55 50%, #222);
- 	width:50%;
- 	height:100%;
- 	float:left;
- 	position:relative;
-}
 
 .scoreboard .scoreboard-score-box{
 	
@@ -180,7 +140,7 @@
 	@include background(linear-gradient(red, black));
 	float:left;
 	width:50%;
-	height:100%;
+	min-height:100%;
 	text-align:left;
 }
 
@@ -188,7 +148,7 @@
 	@include background(linear-gradient(blue, black));
 	float:left;
 	width:50%;
-	height:100%;
+	min-height:100%;
 	text-align:right;
 }
 
@@ -254,7 +214,7 @@
 }
 
 .scoreboard .scoreboard-break-timer {
-	@include scoreboard-white-timer;
+	//@include scoreboard-white-timer;
 	font-size: 6vw;
 	margin: 2vh auto;
 	width: 25% ;
@@ -283,7 +243,7 @@
 	margin-right:auto;
 	margin-top:auto;
 	text-shadow: 8px 8px 15px #000;
-	position: absolute;
+	//position: absolute;
 }
 
 .scoreboard .scoreboard-penalty {
@@ -292,16 +252,17 @@
 	font-size:4vw;
 	height:40px;
 	padding: 0 3%;
-	bottom:10%;
+	bottom:100px;
 	width:100%;
 	margin-right:auto;
 	margin-top:auto;
-	position: absolute;
+	position: relative;
 	font-style:italic;
 	color:orange;
 	font-family:'courier new';
 	
 }
+
 
 .scoreboard .scoreboard-player {
 	font-size:4vw;

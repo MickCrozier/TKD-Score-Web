@@ -88,12 +88,12 @@ angular.module('tkdscore', [
 
     $sailsSocket.subscribe('disconnect', function(data) {
         console.log('Socket conneted:', data);
-        reload();
+        //reload();
     });
 
     $sailsSocket.subscribe('reconnecting', function(data) {
         console.log('Socket conneted:', data);
-        reload();
+        //reload();
     });
 
     $sailsSocket.subscribe('reconnect', function(data) {
@@ -102,7 +102,7 @@ angular.module('tkdscore', [
 
     $sailsSocket.subscribe('error', function(data) {
         console.log('Socket error:', data);
-        reload();
+        //reload();
     });
 
    
