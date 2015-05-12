@@ -1,14 +1,17 @@
 
 @import "compass/css3/user-interface";
 @import "compass/css3/images";
+@import "compass/css3/text-shadow";
 
 @mixin scoreboard-white-timer {
 	@include background(linear-gradient(white, #777));
 	color:black;
 	text-align:center;
-	text-shadow: 4px 4px 8px #999;
+	@include text-shadow(#999 4px 4px 8px);
+
 	box-shadow: 8px 8px 15px #000;
 }
+
 
 
 
@@ -243,8 +246,15 @@
 	margin-right:auto;
 	margin-top:auto;
 	text-shadow: 8px 8px 15px #000;
+	@include text-shadow(#000 8px 8px 15px);
 	//position: absolute;
 }
+
+.scoreboard .scoreboard-score-highlight {
+	@include text-shadow($brand-success 8px 8px 15);
+	color: #0F0;
+}
+
 
 .scoreboard .scoreboard-penalty {
 	text-align:center;
@@ -252,7 +262,7 @@
 	font-size:4vw;
 	height:40px;
 	padding: 0 3%;
-	bottom:100px;
+	bottom:10%;
 	width:100%;
 	margin-right:auto;
 	margin-top:auto;

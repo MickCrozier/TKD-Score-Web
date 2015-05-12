@@ -46,6 +46,11 @@
                 parent:'match',
             })
 
+            .state('master', {
+                url: '/master',
+                templateUrl: 'match/views/template-master.html',
+                parent:'match',
+            })
 
 
             
@@ -265,8 +270,8 @@
                     MatchManager.destroy(match);
                 }
 
-                function gotoMatch(match) {
-                    $state.go('match', {matchId:match.id})
+                function gotoMaster(match) {
+                    $state.go('master', {matchId:match.id})
                 }
 
                 function gotoScoreboard(match) {
@@ -278,7 +283,7 @@
 
                 this.gotoControls = gotoControls;
                 this.gotoScoreboard = gotoScoreboard;
-                this.gotoMatch = gotoMatch;
+                this.gotoMaster = gotoMaster;
                 this.newMatch = newMatch;
                 this.destroy = destroy;
             }],
@@ -423,7 +428,11 @@
                     Match.soundHorn(this.match.id);
                 };
 
-                this.edit = MatchUI.openEdit;
+                function edit() {
+                    MatchUI.openEdit(this.match);
+                }
+
+                this.edit = edit;
                 this.points = points;
                 this.penalties = penalties;
                 this.resetMatch = resetMatch;
@@ -437,7 +446,28 @@
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
 
-                
+            }
+        };
+    }])
+
+    .directive('highlightOnChange', ['$timeout', function($timeout) {
+        return {
+
+            scope: {
+                ngBind: '=',
+                highlightOnChange: '@',
+                highlightOnChangeTime: '@',
+            }, // {} = isolate, true = child, false/undefined = no change
+            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+            restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
+            link: function($scope, iElm, iAttrs, controller) {
+
+                $scope.$watch('ngBind', function() {
+                    iElm.addClass($scope.highlightOnChange);
+                    $timeout(function() {
+                        iElm.removeClass($scope.highlightOnChange);
+                    }, $scope.highlightOnChangeTime || 1000)
+                })
             }
         };
     }])
@@ -486,13 +516,10 @@
                 });
 
                 $sailsSocket.subscribe('soundhorn', function(resp) {
-                    console.log('HOOORRRRNN!');
                     horn.play();
                 });
 
-                $sailsSocket.subscribe('match', function(resp) {
-                    console.log(resp.data);
-                });
+                
 
 
 

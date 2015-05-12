@@ -3,12 +3,12 @@
 
 		<div id="chongscore" class="scoreboard-left">
 			<div id="chongName"  class="scoreboard-player" ng-bind="scoreboardVm.match.player1"></div>
-			<div id="chongScore"   class="scoreboard-score" ng-bind="scoreboardVm.match.player1Points"></div>
+			<div id="chongScore" highlight-on-change="scoreboard-score-highlight" class="scoreboard-score" ng-bind="scoreboardVm.match.player1Points"></div>
 			<div id="chongPenalty" class="scoreboard-penalty" ng-bind-html="scoreboardVm.match.player1Penalties | formatPenalties"></div>
 		</div>
 		<div id="hongscore" class="scoreboard-right">
 			<div id="hongName"  class="scoreboard-player" ng-bind="scoreboardVm.match.player2"></div>
-			<div id="hongScore"  class="scoreboard-score" ng-bind="scoreboardVm.match.player2Points"></div>
+			<div highlight-on-change="scoreboard-score-highlight" id="hongScore"  class="scoreboard-score" ng-bind="scoreboardVm.match.player2Points"></div>
 			<div id="hongPenalty" class="scoreboard-penalty" ng-bind-html="match.player2Penalties | formatPenalties">
 			</div>
 		</div>	

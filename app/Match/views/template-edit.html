@@ -16,7 +16,7 @@
 			Hong
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.player1" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.player1 || 'No Name'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.player1" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -25,7 +25,7 @@
 			Chong
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.player2" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.player2 || 'No Name'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.player2" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -34,7 +34,7 @@
 			Rounds
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.numberOfRounds" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.numberOfRounds || 'Default'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.numberOfRounds" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -43,7 +43,7 @@
 			Round Time
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.roundLengthMS" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.roundLengthMS || 'Default'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.roundLengthMS" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -52,7 +52,7 @@
 			Break Time
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.breakLengthMS" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.breakLengthMS || 'Default'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.breakLengthMS" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -61,7 +61,7 @@
 			Num Judges Agree
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.agree" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.agree || 'Default'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.agree" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -70,9 +70,11 @@
 			Judge Score Timeout
 		</div>
 		<div class="col-sm-6">
-			<span class="h4" editable-text="matchEditorVm.match.scoreTimeout" buttons="no" onaftersave="matchEditorVm.save()">{{matchEditorVm.match.scoreTimeout || 'Default'}}</span>
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.scoreTimeout" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
+
+	<button class="btn btn-lg btn-primary btn-block" ng-click="matchEditorVm.save(); $parent.closeThisDialog()">Save</button>
 	
 
 

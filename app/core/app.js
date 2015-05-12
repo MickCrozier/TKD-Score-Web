@@ -28,6 +28,7 @@ angular.module('tkdscore', [
     'ui.event',
     'ui.select',
     'ui.date',
+    'ui.layout',
     //'ui.calendar',
     'xeditable',
     //'rt.popup',
