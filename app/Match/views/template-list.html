@@ -15,6 +15,7 @@
 		<tr>
 
 			<th>Match Id</th>
+			<th>Match Number</th>
 			<th>Hong</th>
 			<th>Chong</th>
 			<th>
@@ -26,6 +27,9 @@
 		<tr ng-repeat="row in matchListVm.matches" ng-click="matchListVm.openEdit(row); $event.stopPropagation();">
 			<td>
 				{{row.id}}
+			</td>
+			<td>
+				{{row.number}}
 			</td>
 			<td>	
 				{{row.player1}}
