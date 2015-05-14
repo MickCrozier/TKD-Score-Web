@@ -52,6 +52,12 @@
                 parent:'match',
             })
 
+            .state('judge', {
+                url: '/judge',
+                template: '<match-judge match="MatchController.match"></match-judge>',
+                parent:'match',
+            })
+
 
             
         }
@@ -135,7 +141,36 @@
             })
         }
 
-        
+
+        ms.registerScore = function (id, player, target, turning) {
+            $sailsSocket.post('/api/match/controls/registerscore', {id:id, player: player, target:target, turning:turning})
+            .success(function(resp) {
+
+            })
+            .error(function(resp) {
+                console.error('controls error', resp);
+            })
+        }
+
+        ms.registerJudge = function (id) {
+            $sailsSocket.post('/api/match/judge', {id:id})
+            .success(function(resp) {
+
+            })
+            .error(function(resp) {
+                console.error('Judge Registration Error', resp);
+            })
+        }
+
+        ms.removeJudge = function (id, judge) {
+            $sailsSocket.post('/api/match/removejudge', {id:id, judge: judge})
+            .success(function(resp) {
+
+            })
+            .error(function(resp) {
+                console.error('Judge Remove Error', resp);
+            })
+        }
 
         return ms;
 
@@ -370,7 +405,12 @@
                     this.match.$save();
                 }
 
+                function removeJudge(judge) {
+                    Match.removeJudge(this.match.id, judge)
+                }
+
                 this.save = save;
+                this.removeJudge = removeJudge;
 
             }],
 
@@ -432,6 +472,10 @@
                     MatchUI.openEdit(this.match);
                 }
 
+                function removeJudge(judge) {
+                    Match.removeJudge(this.match.id, judge)
+                }
+
                 this.edit = edit;
                 this.points = points;
                 this.penalties = penalties;
@@ -439,6 +483,85 @@
                 this.pauseResume = pauseResume;
                 this.soundHorn = soundHorn;
                 this.changeRound = changeRound;
+
+            
+            }],
+
+            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
+            link: function($scope, iElm, iAttrs, controller) {
+
+            }
+        };
+    }])
+
+    .directive('matchJudge', [ function(){
+        // Runs during compile
+        return {
+            // name: '',
+            // priority: 1,
+            // terminal: true,
+            scope: {
+                match: '=',
+            }, // {} = isolate, true = child, false/undefined = no change
+            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+            restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
+            templateUrl: 'match/views/template-judge.html',
+            controllerAs: 'matchJudgeVm',
+            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', function($scope, AlertService, Match, MatchUI){
+                var self = this;
+                if(angular.isNumber($scope.match)) {
+                    // if it's ID - get the relevant data
+                    this.match = Match.findOne($scope.match);
+                } else {
+                    // if not - assume it is the item and work with it directly
+                    this.match = $scope.match;
+                }
+
+                var timers = {
+                    1: null,
+                    2: null,
+                }
+
+                var taps = {
+                    1: {body: 0, head:0},
+                    2: {body: 0, head:0},
+                }
+                
+
+                function tap(player, target) {
+                  
+                    taps[player][target] += 1;
+
+                    if(timers[player] === null) {
+                        timers[player] = setTimeout(function() {
+                            
+                            tranmitTaps(player, taps[player][target], target);
+
+                            timers[player] = null;
+                            taps[player][target] = 0;
+                        }, 250);
+                    }
+
+                };
+
+
+                function tranmitTaps(player, numberOfTaps, target) {
+                    var turning = false;
+                    if(numberOfTaps > 1) {
+                        turning = true;
+                    }
+                    console.log('Sending Taps', player, target, turning)
+                    Match.registerScore(self.match.id, player, target, turning)
+                }
+
+
+                function register() {
+                    Match.registerJudge(this.match.id);
+                }
+
+                this.tap = tap;
+                this.register = register;
+             
 
             
             }],
@@ -485,7 +608,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'match/views/template-scoreboard.html',
             controllerAs: 'scoreboardVm',
-            controller: ['$scope', '$sailsSocket', 'AlertService', 'Match', 'MatchUI', function($scope, $sailsSocket, AlertService, Match, MatchUI){
+            controller: ['$scope', '$timeout', '$sailsSocket', 'ngNotify', 'Match', 'MatchUI', function($scope, $timeout, $sailsSocket, ngNotify, Match, MatchUI){
                 var self = this;
                 var horn = new Audio('sounds/beep1.wav');
 
@@ -519,8 +642,36 @@
                     horn.play();
                 });
 
-                
+                var PLAYER_TITLE = {
+                    1: 'Hong',
+                    2: 'Chong',
+                }
 
+                var judgeIndicator = {};
+                judgeIndicator[1] = [0,0,0,0];
+                judgeIndicator[2] = [0,0,0,0];
+                    
+
+
+                $sailsSocket.subscribe('judge', function(resp) {    
+
+                    console.log('JUDGE: ', resp.source, resp.player, resp.points);
+                    //ngNotify.set('JUDGE: ' + resp.judge + ' (' + resp.source + ') ' + PLAYER_TITLE[resp.player] + ' ' + resp.points + ' points');
+                    
+                    showJudgeIndicator(resp.judge, resp.player, resp.points);
+                });
+
+                function showJudgeIndicator(judge, player, points) {
+                    judgeIndicator[player][judge - 1] = points;
+                    $timeout(function() {
+                        judgeIndicator[player][judge - 1] = 0;
+                    }, 500);
+                }
+
+
+
+                
+                this.judgeIndicator = judgeIndicator;
 
 
 

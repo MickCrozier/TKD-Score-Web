@@ -35,6 +35,7 @@ angular.module('tkdscore', [
     'ngDialog',
     'cfp.hotkeys',
     'duScroll',
+    'ngNotify',
 
     'bsol.session',
     'bsol.common',

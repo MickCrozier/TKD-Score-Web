@@ -134,6 +134,23 @@
 }
 
 
+.scoreboard-judge {
+	text-align: center;
+	margin: auto 0;
+	background: black;
+	color: white;
+	font-size: 20px;
+	position:relative;
+	min-height:100%;
+	min-width:100%;
+	width:100%;
+	height:100vh;
+	margin:0;
+	padding:0;
+	@include user-select(none);
+}
+
+
 .scoreboard .scoreboard-score-box{
 	
 	height:100%;
@@ -235,7 +252,29 @@
 }
 
 
+.scoreboard .scoreboard-judge-left {
+	width: 50px;
+	
+	text-align: centre;
+	position: absolute;
+	left: 45%;
+	top: 20vw;
+}
 
+
+.scoreboard .scoreboard-judge-right {
+	width: 50px;
+	
+	text-align: centre;
+	position: absolute;
+	right: 45%;
+	top: 20vw;
+	//left: 20px;
+}
+
+.scoreboard .scoreboard-judge-indicator {
+	font-size: 4vw;
+}
 
 .scoreboard .scoreboard-score {
 	text-align:center;
@@ -290,9 +329,10 @@
 	width: 6vw;
 }
 
-.scoreboard .scoreboard-score-zone {
+.scoreboard-judge .scoreboard-score-zone {
 	width:100%;
-	height:50%;
+	height:50vh;
+	min-height:50%;
 	padding-top:10%;
 	background-color: rgba(0, 0, 0, 0);
 	border: 2px black solid;
@@ -300,7 +340,23 @@
 	vertical-align: middle;
 }
 
-.scoreboard .scoreboard-score-zone:active {
+.scoreboard-judge .scoreboard-left {
+	@include background(linear-gradient(red, black));
+	float:left;
+	width:50%;
+	min-height:100%;
+	text-align:left;
+}
+
+.scoreboard-judge .scoreboard-right {
+	@include background(linear-gradient(blue, black));
+	float:left;
+	width:50%;
+	min-height:100%;
+	text-align:right;
+}
+
+.scoreboard-judge .scoreboard-score-zone:active {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 

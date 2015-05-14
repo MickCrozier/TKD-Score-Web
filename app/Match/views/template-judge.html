@@ -1,0 +1,17 @@
+<div id="main" name="main" class="scoreboard-judge">
+	<div id='scorechong'  class="scoreboard-left">
+		<div id='scorechong-head' class="scoreboard-score-zone" ng-click="matchJudgeVm.tap(1, 'head'); stopPropagation();">Head</div>
+		<div id='scorechong-body' class="scoreboard-score-zone" ng-click="matchJudgeVm.tap(1, 'body'); stopPropagation();">Body</div>
+	</div>
+	<div id='scorehong' class="scoreboard-right">
+		<div id='scorehong-head' class="scoreboard-score-zone" ng-click="matchJudgeVm.tap(2, 'head'); stopPropagation();">Head</div>
+		<div id='scorehong-body' class="scoreboard-score-zone" ng-click="matchJudgeVm.tap(2, 'body'); stopPropagation();">Body</div>
+	</div>
+
+	<button class="btn btn-primary btn-sm btn-block" ng-click="matchJudgeVm.register()">Register</button>
+
+
+	<div style="position:absolute;width:100%; top:0; pointer-events:none;">
+		<div id="displaylogo" class="scoreboard-logo"></div>
+	</div>
+</div>

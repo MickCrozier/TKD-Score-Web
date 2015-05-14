@@ -5,11 +5,25 @@
 			<div id="chongName"  class="scoreboard-player" ng-bind="scoreboardVm.match.player1"></div>
 			<div id="chongScore" highlight-on-change="scoreboard-score-highlight" class="scoreboard-score" ng-bind="scoreboardVm.match.player1Points"></div>
 			<div id="chongPenalty" class="scoreboard-penalty" ng-bind-html="scoreboardVm.match.player1Penalties | formatPenalties"></div>
+			<div class="scoreboard-judge-left" ng-show="scoreboardVm.match.showIndicators">
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[1][0]"></div>
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[1][1]"></div>
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[1][2]"></div>
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[1][3]"></div>
+			</div>
 		</div>
 		<div id="hongscore" class="scoreboard-right">
 			<div id="hongName"  class="scoreboard-player" ng-bind="scoreboardVm.match.player2"></div>
 			<div highlight-on-change="scoreboard-score-highlight" id="hongScore"  class="scoreboard-score" ng-bind="scoreboardVm.match.player2Points"></div>
+
 			<div id="hongPenalty" class="scoreboard-penalty" ng-bind-html="match.player2Penalties | formatPenalties">
+			</div>
+
+			<div class="scoreboard-judge-right" ng-show="scoreboardVm.match.showIndicators">
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[2][0]"></div>
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[2][1]"></div>
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[2][2]"></div>
+				<div class="scoreboard-judge-indicator" ng-bind="scoreboardVm.judgeIndicator[2][3]"></div>
 			</div>
 		</div>	
 
