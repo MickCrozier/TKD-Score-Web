@@ -122,6 +122,7 @@ angular.module('bsol.session', [ // list dependancies
                     if (data.session) {
                         //Restangular.restangularizeElement(null, data.session.user, 'User');
                         thisService.session = data.session;
+                        console.log(data.session);
                         deferred.resolve(data.session);
                     } else {
                         deferred.reject(data);

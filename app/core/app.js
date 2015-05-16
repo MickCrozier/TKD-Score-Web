@@ -129,6 +129,7 @@ angular.module('tkdscore', [
         
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
+        FastClick.attach(document.body);
 
 
         ////////////////////////////////////////////////////////
@@ -216,6 +217,7 @@ angular.module('tkdscore', [
 
         SessionService.status().then(function success(session) {
             console.log('Already logged in');
+            
         }, function fail(data) {
 
         });

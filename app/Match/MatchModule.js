@@ -507,7 +507,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'match/views/template-judge.html',
             controllerAs: 'matchJudgeVm',
-            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', function($scope, AlertService, Match, MatchUI){
+            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', 'SessionService', function($scope, AlertService, Match, MatchUI, SessionService){
                 var self = this;
                 if(angular.isNumber($scope.match)) {
                     // if it's ID - get the relevant data
@@ -559,9 +559,27 @@
                     Match.registerJudge(this.match.id);
                 }
 
+                function notRegistered() {
+                    var judges = [
+                        this.match.judge1,
+                        this.match.judge2,
+                        this.match.judge3,
+                        this.match.judge4,
+                    ];
+
+                    _.forEach(judges, function(judgeIdentifier) {
+                        var reg = false
+                        var myIdent = SessionService.session.session.id;
+                        if(judgeIdentifier === myIdent) {
+                            reg = true;
+                        }
+                    })
+                    return reg;
+                }
+
                 this.tap = tap;
                 this.register = register;
-             
+                this.notRegistered = notRegistered;
 
             
             }],
@@ -665,7 +683,7 @@
                     judgeIndicator[player][judge - 1] = points;
                     $timeout(function() {
                         judgeIndicator[player][judge - 1] = 0;
-                    }, 500);
+                    }, self.match.scoreTimeout * 0.75);
                 }
 
 
