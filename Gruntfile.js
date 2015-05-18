@@ -87,12 +87,15 @@ module.exports = function (grunt) {
         {
           context: '/api',
           host: '0.0.0.0',
-          port: 1337
+          port: 1337,
+          xforward: true,
         },
         {
           context: '/socket.io', //will need to update this later
           host: '0.0.0.0',
-          port: 1337
+          port: 1337,
+          xforward: true,
+          ws: true,
         },
       ],
 

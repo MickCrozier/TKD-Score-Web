@@ -15,6 +15,7 @@
 
 
 
+
 .controls {
 
 	@include user-select(none);
@@ -131,7 +132,9 @@
 	margin:0;
 	padding:0;
 	@include user-select(none);
+	pointer-events:none;
 }
+
 
 
 .scoreboard-judge {
@@ -234,7 +237,7 @@
 }
 
 .scoreboard .scoreboard-break-timer {
-	//@include scoreboard-white-timer;
+	@include scoreboard-white-timer;
 	font-size: 6vw;
 	margin: 2vh auto;
 	width: 25% ;
@@ -301,7 +304,7 @@
 	font-size:4vw;
 	height:40px;
 	padding: 0 3%;
-	bottom:10%;
+	bottom:4vw;
 	width:100%;
 	margin-right:auto;
 	margin-top:auto;
@@ -309,9 +312,7 @@
 	font-style:italic;
 	color:orange;
 	font-family:'courier new';
-	
 }
-
 
 .scoreboard .scoreboard-player {
 	font-size:4vw;
@@ -329,7 +330,7 @@
 	width: 6vw;
 }
 
-.scoreboard-judge .scoreboard-score-zone {
+@mixin scoreboard-score-zone {
 	width:100%;
 	height:50vh;
 	min-height:50%;
@@ -338,7 +339,25 @@
 	border: 2px black solid;
 	text-align: center;
 	vertical-align: middle;
+	&:active {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
 }
+
+
+
+
+.scoreboard-judge .scoreboard-score-zone-top {
+	@include scoreboard-score-zone;
+	height:45vh;
+}
+
+
+.scoreboard-judge .scoreboard-score-zone-bottom {
+	@include scoreboard-score-zone;
+	height:55vh;
+}
+
 
 .scoreboard-judge .scoreboard-left {
 	@include background(linear-gradient(red, black));
@@ -356,8 +375,28 @@
 	text-align:right;
 }
 
-.scoreboard-judge .scoreboard-score-zone:active {
+
+.registered-overlay {
+	position:absolute;
+	bottom: 0px;
+	height: 50px;
+	min-height:50px;
+	width:100%;
+	text-align:center;
+	pointer-events:none;
+}
+
+.notregistered-overlay {
+	position:absolute;
+	top: 0px;
+	height: 100%;
+	min-height:100%;
+	width:100%;
+	text-align:center;
+	vertical-align:middle;
 	background-color: rgba(0, 0, 0, 0.5);
 }
+
+
 
 

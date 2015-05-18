@@ -5,8 +5,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 @import "../bsol/bs.scss";
+@import "../core/ngDialogDefault.scss";
 
 @import "../match/match.scss";
+
 
 
 BODY {
@@ -18,8 +20,6 @@ HTML {
   margin: 0px;
   padding: 0px;
 }
-
-
 
 
 

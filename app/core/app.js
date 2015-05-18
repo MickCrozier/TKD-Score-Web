@@ -122,14 +122,16 @@ angular.module('tkdscore', [
 
 
 
-.run(['$log', '$rootScope', '$state', '$stateParams', 'SessionService', 'editableOptions', 'AlertService',
-    function($log, $rootScope, $state, $stateParams, SessionService, editableOptions, AlertService) {
+.run(['$log', '$rootScope', '$state', '$stateParams', 'SessionService', 'editableOptions', 'AlertService', '$cookieStore',
+    function($log, $rootScope, $state, $stateParams, SessionService, editableOptions, AlertService, $cookieStore) {
          
         ///////////// Config stuff ///////////////////
         
         editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
         FastClick.attach(document.body);
+        
+
 
 
         ////////////////////////////////////////////////////////

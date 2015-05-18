@@ -94,13 +94,19 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			Points
+			Points (HT, H, BT, B)
 		</div>
-		<div class="col-sm-6">
-			HT <input type="text" class="form-control" ng-model="matchEditorVm.match.pointsHeadTurning" buttons="no" ng-blur="matchEditorVm.save()">
-			H <input type="text" class="form-control" ng-model="matchEditorVm.match.pointsHead" buttons="no" ng-blur="matchEditorVm.save()">
-			BT <input type="text" class="form-control" ng-model="matchEditorVm.match.pointsBodyTurning" buttons="no" ng-blur="matchEditorVm.save()">
-			B <input type="text" class="form-control" ng-model="matchEditorVm.match.pointsBody" buttons="no" ng-blur="matchEditorVm.save()">
+		<div class="col-xs-1">
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.pointsHeadTurning" buttons="no" ng-blur="matchEditorVm.save()">
+		</div>
+		<div class="col-xs-1">
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.pointsHead" buttons="no" ng-blur="matchEditorVm.save()">
+		</div>
+		<div class="col-xs-1">
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.pointsBodyTurning" buttons="no" ng-blur="matchEditorVm.save()">
+		</div>
+		<div class="col-xs-1">
+			<input type="text" class="form-control" ng-model="matchEditorVm.match.pointsBody" buttons="no" ng-blur="matchEditorVm.save()">
 		</div>
 	</div>
 
@@ -108,16 +114,22 @@
 		<div class="col-sm-6">
 			Judges
 		</div>
-		<div class="col-sm-6">
+		<div class="col-xs-1">
 			<div ng-show="matchEditorVm.match.judge1">
 				1 <button class="btn btn-danger btn-sm" ng-click="matchEditorVm.removeJudge(1)"><span class="glyphicon glyphicon-remove"></span></button>
 			</div>
+		</div>
+		<div class="col-xs-1">
 			<div ng-show="matchEditorVm.match.judge2">
 				2 <button class="btn btn-danger btn-sm" ng-click="matchEditorVm.removeJudge(2)"><span class="glyphicon glyphicon-remove"></span></button>
 			</div>
+		</div>
+		<div class="col-xs-1">
 			<div ng-show="matchEditorVm.match.judge3">
 				3 <button class="btn btn-danger btn-sm" ng-click="matchEditorVm.removeJudge(3)"><span class="glyphicon glyphicon-remove"></span></button>
 			</div>
+		</div>
+		<div class="col-xs-1">
 			<div ng-show="matchEditorVm.match.judge4">
 				4 <button class="btn btn-danger btn-sm" ng-click="matchEditorVm.removeJudge(4)"><span class="glyphicon glyphicon-remove"></span></button>
 			</div>

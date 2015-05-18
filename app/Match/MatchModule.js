@@ -63,7 +63,7 @@
         }
     ])
 
-    .controller('MatchlistController', ['$scope', '$stateParams', 'MatchUI', 'Match', function($scope, $stateParams, MatchUI, Match){
+    .controller('MatchlistController', ['$scope', '$stateParams', 'MatchUI', 'Match', '$cookieStore', function($scope, $stateParams, MatchUI, Match, $cookieStore){
         
     }])
 
@@ -73,7 +73,7 @@
 
 
 
-    .factory('Match', ['$sailsResource', '$sailsSocket', function($sailsResource, $sailsSocket){
+    .factory('Match', ['$sailsResource', '$sailsSocket', '$cookieStore', function($sailsResource, $sailsSocket, $cookieStore){
         var ms = $sailsResource('match', "/api/match/:id", { id: '@id' })
         ms.$name = 'match';
 
@@ -143,6 +143,7 @@
 
 
         ms.registerScore = function (id, player, target, turning) {
+
             $sailsSocket.post('/api/match/controls/registerscore', {id:id, player: player, target:target, turning:turning})
             .success(function(resp) {
 
@@ -153,6 +154,7 @@
         }
 
         ms.registerJudge = function (id) {
+            console.log('heelo');
             $sailsSocket.post('/api/match/judge', {id:id})
             .success(function(resp) {
 
@@ -313,12 +315,17 @@
                     $state.go('scoreboard', {matchId:match.id})
                 }
 
+                function gotoJudge(match) {
+                    $state.go('judge', {matchId:match.id})
+                }
+
                 this.matches = MatchManager.get();
                 this.openEdit = MatchUI.openEdit;
 
                 this.gotoControls = gotoControls;
                 this.gotoScoreboard = gotoScoreboard;
                 this.gotoMaster = gotoMaster;
+                this.gotoJudge = gotoJudge;
                 this.newMatch = newMatch;
                 this.destroy = destroy;
             }],
@@ -351,7 +358,7 @@
             var dialog = ngDialog.open({
 
                 plain: true,
-                //className: 'ngdialog-theme-normal',
+                className: 'ngdialog-theme-normal',
                 template:'<div><matcheditor item="item"></matcheditor></div>',
                 
                 controller: ['$scope',
@@ -435,7 +442,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'match/views/template-controls.html',
             controllerAs: 'matchControlsVm',
-            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', function($scope, AlertService, Match, MatchUI){
+            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', '$cookieStore', function($scope, AlertService, Match, MatchUI, $cookieStore){
                 if(angular.isNumber($scope.match)) {
                     // if it's ID - get the relevant data
                     this.match = Match.findOne($scope.match);
@@ -550,7 +557,7 @@
                     if(numberOfTaps > 1) {
                         turning = true;
                     }
-                    console.log('Sending Taps', player, target, turning)
+                    //console.log('Sending Taps', player, target, turning)
                     Match.registerScore(self.match.id, player, target, turning)
                 }
 
@@ -559,27 +566,33 @@
                     Match.registerJudge(this.match.id);
                 }
 
-                function notRegistered() {
+                
+                
+
+                function registered() {
                     var judges = [
                         this.match.judge1,
                         this.match.judge2,
                         this.match.judge3,
                         this.match.judge4,
                     ];
+                  
 
-                    _.forEach(judges, function(judgeIdentifier) {
-                        var reg = false
-                        var myIdent = SessionService.session.session.id;
+                    var myIdent = SessionService.session.ident;
+                    var reg = false
+                    _.forEach(judges, function(judgeIdentifier, key) {
+                  
                         if(judgeIdentifier === myIdent) {
-                            reg = true;
+                            reg = 'Judge ' + (key + 1);
                         }
-                    })
+                    });
+                  
                     return reg;
                 }
 
                 this.tap = tap;
                 this.register = register;
-                this.notRegistered = notRegistered;
+                this.registered = registered;
 
             
             }],

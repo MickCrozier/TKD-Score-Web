@@ -60,7 +60,7 @@
 
 .ngdialog.ngdialog-theme-normal {
   padding-bottom: 60px;
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
 .ngdialog.ngdialog-theme-normal.ngdialog-closing .ngdialog-content {
@@ -78,7 +78,7 @@
   font-size: 1.1em;
   line-height: 1.5em;
   margin: 0 auto;
-  //max-width: 100%;
+  max-width: 100%;
   padding: 1em;
   position: relative;
   width: 650px;
@@ -184,6 +184,7 @@
   .ngdialog.ngdialog-theme-normal .ngdialog-button:focus {
     -webkit-animation: none;
     animation: none;
+    width:100%;
   }
 }
 
