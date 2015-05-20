@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var Module = angular.module('tkdscore.match', [ // list dependancies
+    var Module = angular.module('tkdscore.mat', [ // list dependancies
         'bsol.session',
         'ui.bootstrap',
         'sailsResource',
@@ -11,24 +11,24 @@
     .config(['$stateProvider',
         function($stateProvider) {
             $stateProvider
-            .state('matchlist', {
-                url: '/matchlist/',
+            .state('matlist', {
+                url: '/matlist/',
                 //parent:'',
-                template: '<match-list></match-list>',
+                template: '<mat-list></mat-list>',
                 //templateUrl: 'cues/views/showlist.html',
-                controller: 'MatchlistController',
-                controllerAs: 'MatchlistController'
+                controller: 'MatlistController',
+                controllerAs: 'MatlistController'
             })
 
-            .state('match', {
-                url: '/match/:matchId',
+            .state('mat', {
+                url: '/mat/:matId',
                 template: '<div ui-view=""></div>',
                 abstract:true,
-                controller: 'MatchController',
-                controllerAs: 'MatchController',
+                controller: 'MatController',
+                controllerAs: 'MatController',
                 resolve: {
-                    resolvedMatch: ['$stateParams', 'Match', 'MatchService', function($stateParams, Match, MatchService) {
-                            return MatchService.get($stateParams.matchId).$promise;
+                    resolvedMat: ['$stateParams', 'Mat', 'MatService', function($stateParams, Mat, MatService) {
+                            return MatService.get($stateParams.matId).$promise;
                         }
                     ]
                 }
@@ -36,26 +36,26 @@
 
             .state('controls', {
                 url: '/controls',
-                template: '<match-controls match="MatchController.match"></match-controls>',
-                parent:'match',
+                template: '<mat-controls mat="MatController.mat"></mat-controls>',
+                parent:'mat',
             })
 
             .state('scoreboard', {
                 url: '/scordboard',
-                template: '<scoreboard match="MatchController.match"></scoreboard>',
-                parent:'match',
+                template: '<scoreboard mat="MatController.mat"></scoreboard>',
+                parent:'mat',
             })
 
             .state('master', {
                 url: '/master',
-                templateUrl: 'match/views/template-master.html',
-                parent:'match',
+                templateUrl: 'mat/views/template-master.html',
+                parent:'mat',
             })
 
             .state('judge', {
                 url: '/judge',
-                template: '<match-judge match="MatchController.match"></match-judge>',
-                parent:'match',
+                template: '<mat-judge mat="MatController.mat"></mat-judge>',
+                parent:'mat',
             })
 
 
@@ -63,23 +63,23 @@
         }
     ])
 
-    .controller('MatchlistController', ['$scope', '$stateParams', 'MatchUI', 'Match', '$cookieStore', function($scope, $stateParams, MatchUI, Match, $cookieStore){
+    .controller('MatlistController', ['$scope', '$stateParams', 'MatUI', 'Mat', '$cookieStore', function($scope, $stateParams, MatUI, Mat, $cookieStore){
         
     }])
 
-    .controller('MatchController', ['resolvedMatch', function(resolvedMatch){
-        this.match = resolvedMatch;
+    .controller('MatController', ['resolvedMat', function(resolvedMat){
+        this.mat = resolvedMat;
     }])
 
 
 
-    .factory('Match', ['$sailsResource', '$sailsSocket', '$cookieStore', function($sailsResource, $sailsSocket, $cookieStore){
-        var ms = $sailsResource('match', "/api/match/:id", { id: '@id' })
-        ms.$name = 'match';
+    .factory('Mat', ['$sailsResource', '$sailsSocket', '$cookieStore', function($sailsResource, $sailsSocket, $cookieStore){
+        var ms = $sailsResource('mat', "/api/mat/:id", { id: '@id' })
+        ms.$name = 'mat';
 
 
         ms.changeRound = function(id, val) {
-            $sailsSocket.post('/api/match/controls/changeRound', {id:id, value:val})
+            $sailsSocket.post('/api/mat/controls/changeRound', {id:id, value:val})
             .success(function(resp) {
 
             })
@@ -89,7 +89,7 @@
         }
 
         ms.points = function (id, player, points) {
-            $sailsSocket.post('/api/match/controls/points', {id:id, player: player, points:points})
+            $sailsSocket.post('/api/mat/controls/points', {id:id, player: player, points:points})
             .success(function(resp) {
 
             })
@@ -99,7 +99,7 @@
         }
 
         ms.penalties = function (id, player, points) {
-            $sailsSocket.post('/api/match/controls/penalties', {id:id, player: player, points:points})
+            $sailsSocket.post('/api/mat/controls/penalties', {id:id, player: player, points:points})
             .success(function(resp) {
 
             })
@@ -108,8 +108,8 @@
             })
         }
 
-        ms.resetMatch = function (id) {
-            $sailsSocket.post('/api/match/controls/resetMatch', {id:id})
+        ms.resetMat = function (id) {
+            $sailsSocket.post('/api/mat/controls/resetMat', {id:id})
             .success(function(resp) {
 
             })
@@ -119,7 +119,7 @@
         }
 
         ms.pauseResume = function (id) {
-            $sailsSocket.post('/api/match/controls/pauseResume', {id:id})
+            $sailsSocket.post('/api/mat/controls/pauseResume', {id:id})
             .success(function(resp) {
 
             })
@@ -132,7 +132,7 @@
 
         ms.soundHorn = function (id) {
          
-            $sailsSocket.post('/api/match/controls/soundhorn', {id:id})
+            $sailsSocket.post('/api/mat/controls/soundhorn', {id:id})
             .success(function(resp) {
 
             })
@@ -144,7 +144,7 @@
 
         ms.registerScore = function (id, player, target, turning) {
 
-            $sailsSocket.post('/api/match/controls/registerscore', {id:id, player: player, target:target, turning:turning})
+            $sailsSocket.post('/api/mat/controls/registerscore', {id:id, player: player, target:target, turning:turning})
             .success(function(resp) {
 
             })
@@ -155,7 +155,7 @@
 
         ms.registerJudge = function (id) {
             console.log('heelo');
-            $sailsSocket.post('/api/match/judge', {id:id})
+            $sailsSocket.post('/api/mat/judge', {id:id})
             .success(function(resp) {
 
             })
@@ -165,7 +165,7 @@
         }
 
         ms.removeJudge = function (id, judge) {
-            $sailsSocket.post('/api/match/removejudge', {id:id, judge: judge})
+            $sailsSocket.post('/api/mat/removejudge', {id:id, judge: judge})
             .success(function(resp) {
 
             })
@@ -180,17 +180,17 @@
 
         /**
      * @ngdoc service
-     * @name tkdscore.match.servie:MatchManger
+     * @name tkdscore.mat.servie:MatManger
      * 
      * @description
-     * Takes care of managing the match list
+     * Takes care of managing the mat list
      *
     */
-    .service('MatchManager', ['ListManager', 'Match', function(ListManager, Match){
+    .service('MatManager', ['ListManager', 'Mat', function(ListManager, Mat){
 
         return new ListManager({
             parentDataModel: null,
-            dataModel: Match,
+            dataModel: Mat,
             defaultNewData: {},
             hasParent: false,
         })
@@ -287,50 +287,50 @@
         }
     ])
 
-    .directive('matchList', [function(){
+    .directive('matList', [function(){
         return {
             scope: {},
-            controllerAs: 'matchListVm',
-            controller: ['$scope', '$state', 'MatchUI', 'MatchManager', function($scope, $state, MatchUI, MatchManager) {
+            controllerAs: 'matListVm',
+            controller: ['$scope', '$state', 'MatUI', 'MatManager', function($scope, $state, MatUI, MatManager) {
                 
         
-                function gotoControls(match) {
-                    $state.go('controls', {matchId:match.id})
+                function gotoControls(mat) {
+                    $state.go('controls', {matId:mat.id})
                 }
 
-                function newMatch() {
-                    var match = MatchManager.add();
+                function newMat() {
+                    var mat = MatManager.add();
                 }
 
-                function destroy(match) {
+                function destroy(mat) {
                     // TODO - ask
-                    MatchManager.destroy(match);
+                    MatManager.destroy(mat);
                 }
 
-                function gotoMaster(match) {
-                    $state.go('master', {matchId:match.id})
+                function gotoMaster(mat) {
+                    $state.go('master', {matId:mat.id})
                 }
 
-                function gotoScoreboard(match) {
-                    $state.go('scoreboard', {matchId:match.id})
+                function gotoScoreboard(mat) {
+                    $state.go('scoreboard', {matId:mat.id})
                 }
 
-                function gotoJudge(match) {
-                    $state.go('judge', {matchId:match.id})
+                function gotoJudge(mat) {
+                    $state.go('judge', {matId:mat.id})
                 }
 
-                this.matches = MatchManager.get();
-                this.openEdit = MatchUI.openEdit;
+                this.mates = MatManager.get();
+                this.openEdit = MatUI.openEdit;
 
                 this.gotoControls = gotoControls;
                 this.gotoScoreboard = gotoScoreboard;
                 this.gotoMaster = gotoMaster;
                 this.gotoJudge = gotoJudge;
-                this.newMatch = newMatch;
+                this.newMat = newMat;
                 this.destroy = destroy;
             }],
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'match/views/template-list.html',
+            templateUrl: 'mat/views/template-list.html',
             
             link: function($scope, iElm, iAttrs, controller) {
                 
@@ -344,13 +344,13 @@
 
 /**
  * @ngdoc service
- * @name tkdscore.match.service:MatchUI
+ * @name tkdscore.mat.service:MatUI
  * 
  * @description
  * A collection of UI helpers that can be called in js
  *
 */
-    .service('MatchUI', ['ngDialog', function(ngDialog){
+    .service('MatUI', ['ngDialog', function(ngDialog){
 
         // Opens a dialog containg the cuebuilder directive for editing cues.
         // accepts either the cue id or the cue model itself
@@ -359,7 +359,7 @@
 
                 plain: true,
                 className: 'ngdialog-theme-normal',
-                template:'<div><matcheditor item="item"></matcheditor></div>',
+                template:'<div><mateditor item="item"></mateditor></div>',
                 
                 controller: ['$scope',
                     function($scope) {
@@ -379,14 +379,14 @@
 
     /**
  * @ngdoc directive
- * @name tkdscore.match.directive:matcheditor
+ * @name tkdscore.mat.directive:mateditor
  * 
  * @description
- * A template for editing match information
+ * A template for editing mat information
  *
- * <pre> <matcheditor> item="myIdOrMyMatchItem"></matcheditor> </pre>
+ * <pre> <mateditor> item="myIdOrMyMatItem"></mateditor> </pre>
 */
-    .directive('matcheditor', [ function(){
+    .directive('mateditor', [ function(){
         // Runs during compile
         return {
             // name: '',
@@ -397,23 +397,23 @@
             }, // {} = isolate, true = child, false/undefined = no change
             // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'match/views/template-edit.html',
-            controllerAs: 'matchEditorVm',
-            controller: ['$scope', 'AlertService', 'Match', function($scope, AlertService, Match){
+            templateUrl: 'mat/views/template-edit.html',
+            controllerAs: 'matEditorVm',
+            controller: ['$scope', 'AlertService', 'Mat', function($scope, AlertService, Mat){
                 if(angular.isNumber(this.item)) {
                     // if it's ID - get the relevant data
-                    this.match = Match.findOne($scope.item);
+                    this.mat = Mat.findOne($scope.item);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.match = $scope.item;
+                    this.mat = $scope.item;
                 }
 
-                function save(match) {
-                    this.match.$save();
+                function save(mat) {
+                    this.mat.$save();
                 }
 
                 function removeJudge(judge) {
-                    Match.removeJudge(this.match.id, judge)
+                    Mat.removeJudge(this.mat.id, judge)
                 }
 
                 this.save = save;
@@ -429,64 +429,64 @@
         };
     }])
 
-    .directive('matchControls', [ function(){
+    .directive('matControls', [ function(){
         // Runs during compile
         return {
             // name: '',
             // priority: 1,
             // terminal: true,
             scope: {
-                match: '=',
+                mat: '=',
             }, // {} = isolate, true = child, false/undefined = no change
             // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'match/views/template-controls.html',
-            controllerAs: 'matchControlsVm',
-            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', '$cookieStore', function($scope, AlertService, Match, MatchUI, $cookieStore){
-                if(angular.isNumber($scope.match)) {
+            templateUrl: 'mat/views/template-controls.html',
+            controllerAs: 'matControlsVm',
+            controller: ['$scope', 'AlertService', 'Mat', 'MatUI', '$cookieStore', function($scope, AlertService, Mat, MatUI, $cookieStore){
+                if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
-                    this.match = Match.findOne($scope.match);
+                    this.mat = Mat.findOne($scope.mat);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.match = $scope.match;
+                    this.mat = $scope.mat;
                 }
 
                 function changeRound(val) {
-                    Match.changeRound(this.match.id, this.match.round + val);
+                    Mat.changeRound(this.mat.id, this.mat.round + val);
                 };
 
                 function points(player, points) {
-                    Match.points(this.match.id, player, points);
+                    Mat.points(this.mat.id, player, points);
                 };
 
                 function penalties(player, points) {
-                    Match.penalties(this.match.id, player, points);
+                    Mat.penalties(this.mat.id, player, points);
                 };
 
-                function resetMatch() {
-                    Match.resetMatch(this.match.id);
+                function resetMat() {
+                    Mat.resetMat(this.mat.id);
                 };
 
                 function pauseResume() {
-                    Match.pauseResume(this.match.id);
+                    Mat.pauseResume(this.mat.id);
                 };
 
                 function soundHorn() {
-                    Match.soundHorn(this.match.id);
+                    Mat.soundHorn(this.mat.id);
                 };
 
                 function edit() {
-                    MatchUI.openEdit(this.match);
+                    MatUI.openEdit(this.mat);
                 }
 
                 function removeJudge(judge) {
-                    Match.removeJudge(this.match.id, judge)
+                    Mat.removeJudge(this.mat.id, judge)
                 }
 
                 this.edit = edit;
                 this.points = points;
                 this.penalties = penalties;
-                this.resetMatch = resetMatch;
+                this.resetMat = resetMat;
                 this.pauseResume = pauseResume;
                 this.soundHorn = soundHorn;
                 this.changeRound = changeRound;
@@ -501,27 +501,27 @@
         };
     }])
 
-    .directive('matchJudge', [ function(){
+    .directive('matJudge', [ function(){
         // Runs during compile
         return {
             // name: '',
             // priority: 1,
             // terminal: true,
             scope: {
-                match: '=',
+                mat: '=',
             }, // {} = isolate, true = child, false/undefined = no change
             // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'match/views/template-judge.html',
-            controllerAs: 'matchJudgeVm',
-            controller: ['$scope', 'AlertService', 'Match', 'MatchUI', 'SessionService', function($scope, AlertService, Match, MatchUI, SessionService){
+            templateUrl: 'mat/views/template-judge.html',
+            controllerAs: 'matJudgeVm',
+            controller: ['$scope', 'AlertService', 'Mat', 'MatUI', 'SessionService', function($scope, AlertService, Mat, MatUI, SessionService){
                 var self = this;
-                if(angular.isNumber($scope.match)) {
+                if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
-                    this.match = Match.findOne($scope.match);
+                    this.mat = Mat.findOne($scope.mat);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.match = $scope.match;
+                    this.mat = $scope.mat;
                 }
 
                 var timers = {
@@ -558,12 +558,12 @@
                         turning = true;
                     }
                     //console.log('Sending Taps', player, target, turning)
-                    Match.registerScore(self.match.id, player, target, turning)
+                    Mat.registerScore(self.mat.id, player, target, turning)
                 }
 
 
                 function register() {
-                    Match.registerJudge(this.match.id);
+                    Mat.registerJudge(this.mat.id);
                 }
 
                 
@@ -571,10 +571,10 @@
 
                 function registered() {
                     var judges = [
-                        this.match.judge1,
-                        this.match.judge2,
-                        this.match.judge3,
-                        this.match.judge4,
+                        this.mat.judge1,
+                        this.mat.judge2,
+                        this.mat.judge3,
+                        this.mat.judge4,
                     ];
                   
 
@@ -633,27 +633,27 @@
             // priority: 1,
             // terminal: true,
             scope: {
-                match: '=',
+                mat: '=',
             }, // {} = isolate, true = child, false/undefined = no change
             // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'match/views/template-scoreboard.html',
+            templateUrl: 'mat/views/template-scoreboard.html',
             controllerAs: 'scoreboardVm',
-            controller: ['$scope', '$timeout', '$sailsSocket', 'ngNotify', 'Match', 'MatchUI', function($scope, $timeout, $sailsSocket, ngNotify, Match, MatchUI){
+            controller: ['$scope', '$timeout', '$sailsSocket', 'ngNotify', 'Mat', 'MatUI', function($scope, $timeout, $sailsSocket, ngNotify, Mat, MatUI){
                 var self = this;
                 var horn = new Audio('sounds/beep1.wav');
 
-                if(angular.isNumber($scope.match)) {
+                if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
-                    this.match = Match.findOne($scope.match);
+                    this.mat = Mat.findOne($scope.mat);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.match = $scope.match;
+                    this.mat = $scope.mat;
                 }
 
                 this.timer = {
-                    roundTimeMS: this.match.roundTimeMS,
-                    breakTimeMS: this.match.breakTimeMS,
+                    roundTimeMS: this.mat.roundTimeMS,
+                    breakTimeMS: this.mat.breakTimeMS,
                     pauseWatchMS: 0,
                 };
 
@@ -696,7 +696,7 @@
                     judgeIndicator[player][judge - 1] = points;
                     $timeout(function() {
                         judgeIndicator[player][judge - 1] = 0;
-                    }, self.match.scoreTimeout * 0.75);
+                    }, self.mat.scoreTimeout * 0.75);
                 }
 
 
@@ -717,8 +717,8 @@
         };
     }])
 
-    .service('MatchService', ['Match', function(Match) {
-        this.Model = Match;
+    .service('MatService', ['Mat', function(Mat) {
+        this.Model = Mat;
         this.item = {};
 
         var self = this;

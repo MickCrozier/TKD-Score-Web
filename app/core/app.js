@@ -43,7 +43,7 @@ angular.module('tkdscore', [
     'sails.io',
     
     'qtime.services',
-    'tkdscore.match',
+    'tkdscore.mat',
 	
 ])
 
@@ -55,7 +55,7 @@ angular.module('tkdscore', [
         $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix('');
 
-        $urlRouterProvider.otherwise('/matchlist/');
+        $urlRouterProvider.otherwise('/matlist/');
 
         $stateProvider.state('front', {
             url: '/',
