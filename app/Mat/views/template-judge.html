@@ -1,11 +1,11 @@
  <div id="main" name="main" class="scoreboard-judge">
 	<div id='scorechong'  class="scoreboard-left">
-		<div id='scorechong-head' class="scoreboard-score-zone-top" ng-click="matJudgeVm.tap(1, 'head'); stopPropagation();">Head</div>
-		<div id='scorechong-body' class="scoreboard-score-zone-bottom" ng-click="matJudgeVm.tap(1, 'body'); stopPropagation();">Body</div>
+		<div id='scorechong-head' class="scoreboard-score-zone-top" ng-click="matJudgeVm.tap(1, 'head'); stopPropagation();" ng-hide="matJudgeVm.mat.novice">Head</div>
+		<div id="scorechong-body" ng-class="{'scoreboard-score-zone-full':matJudgeVm.mat.novice, 'scoreboard-score-zone-bottom':!matJudgeVm.mat.novice}" ng-click="matJudgeVm.tap(1, 'body'); stopPropagation();">Body</div>
 	</div>
 	<div id='scorehong' class="scoreboard-right">
-		<div id='scorehong-head' class="scoreboard-score-zone-top" ng-click="matJudgeVm.tap(2, 'head'); stopPropagation();">Head</div>
-		<div id='scorehong-body' class="scoreboard-score-zone-bottom" ng-click="matJudgeVm.tap(2, 'body'); stopPropagation();">Body</div>
+		<div id='scorehong-head' class="scoreboard-score-zone-top" ng-click="matJudgeVm.tap(2, 'head'); stopPropagation();" ng-hide="matJudgeVm.mat.novice">Head</div>
+		<div id="scorehong-body" ng-class="{'scoreboard-score-zone-full':matJudgeVm.mat.novice, 'scoreboard-score-zone-bottom':!matJudgeVm.mat.novice}" ng-click="matJudgeVm.tap(2, 'body'); stopPropagation();">Body</div>
 	</div>
 
 	

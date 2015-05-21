@@ -88,13 +88,13 @@
 			Show Judge Indicators
 		</div>
 		<div class="col-sm-6">
-			<input type="checkbox" aria-label="..." class="btn btn-default" ng-model="matEditorVm.mat.showIndicators" ng-change="matEditorVm.save()">
+			<input type="checkbox" aria-label="..." class="checkbox" ng-model="matEditorVm.mat.showIndicators" ng-change="matEditorVm.save()">
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-sm-6">
-			Points (HT, H, BT, B)
+			Points (HT, H, BT, B, Novice)
 		</div>
 		<div class="col-xs-1">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.pointsHeadTurning" buttons="no" ng-blur="matEditorVm.save()">
@@ -107,6 +107,9 @@
 		</div>
 		<div class="col-xs-1">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.pointsBody" buttons="no" ng-blur="matEditorVm.save()">
+		</div>
+		<div class="col-xs-1">
+			<input type="checkbox" aria-label="..." class="checkbox" ng-model="matEditorVm.mat.novice" ng-change="matEditorVm.save()">
 		</div>
 	</div>
 

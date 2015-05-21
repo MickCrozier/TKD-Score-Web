@@ -330,6 +330,8 @@
 	width: 6vw;
 }
 
+
+
 @mixin scoreboard-score-zone {
 	width:100%;
 	height:50vh;
@@ -345,7 +347,10 @@
 }
 
 
-
+.scoreboard-judge  .scoreboard-score-zone-full {
+	@include scoreboard-score-zone;
+	height:100vh;
+}
 
 .scoreboard-judge .scoreboard-score-zone-top {
 	@include scoreboard-score-zone;
