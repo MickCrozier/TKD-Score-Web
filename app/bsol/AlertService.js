@@ -3,8 +3,8 @@
 (function() {
     'use strict';
 
-    angular.module('bsol.common')
-    .service('AlertService', ['$modal', 'ngDialog', function($modal, ngDialog){
+    angular.module('bsol.common',['ngDialog', 'ngNotify'])
+    .service('AlertService', ['$modal', 'ngDialog', 'ngNotify', function($modal, ngDialog, ngNotify){
 
 
     	var s = [];
@@ -51,6 +51,11 @@
                 ]
             });
         };
+
+        s.notify = function(message) { // TODO enhance with classes and permanance
+            ngNotify.set(message);
+        }
+
 
         return s;
         

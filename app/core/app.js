@@ -13,38 +13,20 @@ angular.module('tkdscore', [
 	'ngCookies',
 	'ngSanitize',
 	'ngTouch',
-	//'restmod',
-    //'ngTagsInput',
-    //'ui.grid',
-    //'ui.grid.edit',
-    //'ui.grid.selection',
-    //'ui.grid.expandable',
-    //'ui.grid.autoResize',
-
 
 	'ui.router',
 	'ui.bootstrap',
-    'ui.keypress',
-    'ui.event',
-    'ui.select',
-    'ui.date',
-    'ui.layout',
-    //'ui.calendar',
-    'xeditable',
-    //'rt.popup',
     'ngDialog',
     'cfp.hotkeys',
-    'duScroll',
     'ngNotify',
 
     'bsol.session',
     'bsol.common',
 
     'sails.io',
-    
     'qtime.services',
+    'tkdscore.match',
     'tkdscore.mat',
-	
 ])
 
 
@@ -55,7 +37,7 @@ angular.module('tkdscore', [
         $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix('');
 
-        $urlRouterProvider.otherwise('/matlist/');
+        $urlRouterProvider.otherwise('/');
 
         $stateProvider.state('front', {
             url: '/',
@@ -121,13 +103,19 @@ angular.module('tkdscore', [
 }])
 
 
+/*
 
-.run(['$log', '$rootScope', '$state', '$stateParams', 'SessionService', 'editableOptions', 'AlertService', '$cookieStore',
-    function($log, $rootScope, $state, $stateParams, SessionService, editableOptions, AlertService, $cookieStore) {
+// Set the theme for xeditable
+.run(['editableOptions', function(editableOptions){
+    editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+}])
+*/
+
+.run(['$log', '$rootScope', '$state', '$stateParams', 'SessionService', 'AlertService', '$cookieStore',
+    function($log, $rootScope, $state, $stateParams, SessionService, AlertService, $cookieStore) {
          
         ///////////// Config stuff ///////////////////
         
-        editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
         FastClick.attach(document.body);
         
@@ -217,6 +205,8 @@ angular.module('tkdscore', [
             $log.debug(unfoundState.options); // {inherit:false} + default options
         });
 
+
+        // check if we are logged in - also established session
         SessionService.status().then(function success(session) {
             console.log('Already logged in');
             

@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
-
+grunt.loadNpmTasks('grunt-docular');
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
@@ -276,10 +276,23 @@ module.exports = function (grunt) {
         flow: {
           html: {
             steps: {
+              //js: ['concat'], // don't uglify for now - causing errors :(
               js: ['concat', 'uglifyjs'],
+              jsnougly:['concat', 'uglifyjs'],
               css: ['cssmin']
             },
-            post: {}
+            post: {
+              jsnougly:[{
+                name: 'uglifyjs',
+                createConfig: function (context, block) {
+                  //if (block.dest === 'scripts/vendor.js'){
+                    block.options = {
+                      mangle: false
+                    };
+                  //}
+                }
+              }]
+            }
           }
         }
       }
@@ -293,6 +306,7 @@ module.exports = function (grunt) {
         assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
       }
     },
+
 
     // The following *-min tasks will produce minified files in the dist folder
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
@@ -354,16 +368,15 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: ['*.html', '{,*/}views/*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
     },
 
-    // ngmin tries to make the code safe for minification automatically by
-    // using the Angular long form for dependency injection. It doesn't work on
-    // things like resolve or inject so those have to be done manually.
-    ngmin: {
+    // ng-annotate tries to make the code safe for minification automatically
+    // by using the Angular long form for dependency injection.
+    ngAnnotate: {
       dist: {
         files: [{
           expand: true,
@@ -393,7 +406,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            'views/{,*/}*.html',
+            //'{,*/}views/*.html',
             'images/{,*/}*.{webp}',
             'fonts/*',
             'sounds/*.{wav, mp3}'
@@ -408,6 +421,11 @@ module.exports = function (grunt) {
           cwd: '.',
           src: 'bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*',
           dest: '<%= yeoman.dist %>'
+        }, {
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: '{,*/}views/*',
+          dest: '<%= yeoman.dist %>'
         }]
       },
       styles: {
@@ -415,6 +433,12 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      sails: {
+        expand: true,
+        cwd: '<%= yeoman.dist %>',
+        dest: '../tkd-score-server/web',
+        src: '**'
       }
     },
 
@@ -440,7 +464,7 @@ module.exports = function (grunt) {
         scripts: ['angular.js'],
       },
 
-      all: ['app/scripts/app.js', 'app/scripts/**/*.js'],
+      all: ['app/scripts/app.js', 'app/**/*.js'],
     },
 
     docular: {
@@ -504,7 +528,7 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngmin',
+    'ngAnnotate',
     'copy:dist',
     'cdnify',
     'cssmin',
@@ -520,6 +544,10 @@ module.exports = function (grunt) {
     'newer:jshint',
     'test',
     'build'
+  ]);
+
+  grunt.registerTask('sails', 'Copies the dist folder to the rel servers web folder', [
+    'copy:sails'
   ]);
 
   

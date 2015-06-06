@@ -117,6 +117,11 @@
 		<div class="col-sm-6">
 			Judges
 		</div>
+
+		<div class="col-xs-2" ng-hide="matEditorVm.mat.judge1 || matEditorVm.mat.judge2 || matEditorVm.mat.judge3 || matEditorVm.mat.judge4">
+			No Judges
+		</div>
+
 		<div class="col-xs-1">
 			<div ng-show="matEditorVm.mat.judge1">
 				1 <button class="btn btn-danger btn-sm" ng-click="matEditorVm.removeJudge(1)"><span class="glyphicon glyphicon-remove"></span></button>

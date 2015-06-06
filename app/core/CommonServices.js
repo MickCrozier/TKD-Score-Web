@@ -14,28 +14,10 @@ var Module = angular.module('qtime.services', [
     'ui.bootstrap',
 ])
 
-.run(['$templateCache', function($templateCache){
-    $templateCache.put('ui-grid/custom/stringEditor',
-        "<div><form name=\"inputForm\"><input type=\"string\" ng-class=\"'colt' + col.uid\" ui-grid-editor ng-model=\"MODEL_COL_FIELD\"></form></div>"
-    );
-
-    $templateCache.put('ui-grid/custom/minutesEditor',
-        "<div><form name=\"inputForm\"><input minutes-formatter type=\"string\" ng-class=\"'colt' + col.uid\" ui-grid-editor ng-model=\"MODEL_COL_FIELD\"></form></div>"
-    );
-
-    $templateCache.put('ui-grid/custom/uiGridHeaderCellWithEditButton',
-        "<div ng-class=\"{ 'sortable': sortable }\"><div class=\"ui-grid-vertical-bar\">&nbsp;</div><div class=\"ui-grid-cell-contents\" col-index=\"renderIndex\"><span><button type=\"button\" ng-click=\"getExternalScopes().editButtonPressed($event)\" class=\"btn btn-primary btn-xs\" tooltip=\"Edit\" tooltip-placement=\"bottom\"><span class=\"glyphicon glyphicon-edit\"></span></button>{{ col.displayName CUSTOM_FILTERS }}</span> <span ui-grid-visible=\"col.sort.direction\" ng-class=\"{ 'ui-grid-icon-up-dir': col.sort.direction == asc, 'ui-grid-icon-down-dir': col.sort.direction == desc, 'ui-grid-icon-blank': !col.sort.direction }\">&nbsp;</span></div><div class=\"ui-grid-column-menu-button\" ng-if=\"grid.options.enableColumnMenus && !col.isRowHeader  && col.colDef.enableColumnMenu !== false\" class=\"ui-grid-column-menu-button\" ng-click=\"toggleMenu($event)\"><i class=\"ui-grid-icon-angle-down\">&nbsp;</i></div><div ng-if=\"filterable\" class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\"><input type=\"text\" class=\"ui-grid-filter-input\" ng-model=\"colFilter.term\" ng-click=\"$event.stopPropagation()\" ng-attr-placeholder=\"{{colFilter.placeholder || ''}}\"><div class=\"ui-grid-filter-button\" ng-click=\"colFilter.term = null\"><i class=\"ui-grid-icon-cancel right\" ng-show=\"!!colFilter.term\">&nbsp;</i><!-- use !! because angular interprets 'f' as false --></div></div></div>"
-    );
-
-
-    
-}])
-
-
 
 /**
  * @ngdoc factory
- * @name qtime.services.factory:ListManager
+ * @name bsol.common.factory:ListManager
  * 
  * @param {object} options An object containing the options.
      * parentDataModel - the Model factory of the parent
@@ -66,7 +48,7 @@ var Module = angular.module('qtime.services', [
             /**
          * @ngdoc method
          * @name ListManagerListManager#get
-         * @methodOf qtime.services.ListManager
+         * @methodOf bsol.common.ListManager
          *
          * @description
          * Gets the children of the associated parent 
@@ -140,7 +122,7 @@ var Module = angular.module('qtime.services', [
             /**
              * @ngdoc method
              * @name ListManager#add
-             * @methodOf qtime.services.ListManager
+             * @methodOf bsol.common.ListManager
              *
              * @description
              * Syncs a new role to loaded roles array 
@@ -157,7 +139,7 @@ var Module = angular.module('qtime.services', [
             /**
              * @ngdoc method
              * @name ListManager#destroy
-             * @methodOf qtime.services.ListManager
+             * @methodOf bsol.common.ListManager
              *
              * @description
              * Removes the givin object from the list array
@@ -232,120 +214,7 @@ var Module = angular.module('qtime.services', [
 
     }
 ])
-
-
-/**
-
- * @ngdoc service
- * @name tvur.services.service:errorHandler
- * 
- * @description
- * Generic functionality for ngGrid
- *
- * returns array of objects representing the list
-*/
-.service('ErrorHandler', ['AlertService', function(AlertService) {
-        var errorHandler = function(errorData) {
-            var err = errorData;
-            if(err.$response) {
-                err = err.$response.data;
-            }
-
-            if(err) {
-                AlertService.addAlert(err);
-            
-                
-            } else {
-                console.error(err);
-                AlertService.addAlert('Critical Error - check console log', 'danger');
-            }
-        };
-
-        return errorHandler;
-}])
-
-
-
-
-
-/**
-
- * @ngdoc filter
- * @name tvur.services.directive:minutesFilter
- * 
- * @description
- * Convert mintues since midnight to time
- * 
-*/
-.filter('minutesFilter', [
-    function() {
-        return function(time) {
-            var hours = parseInt(time / 60);
-            var minutes = time - (hours * 60);
-            
-            if(isNaN(hours) || isNaN(minutes)) {
-                return time;
-            }
-
-            var hoursStr = hours < 10 ? '0' + hours : hours;
-            var minutesStr = minutes < 10 ? '0' + minutes : minutes;
-
-            return hoursStr + ':' + minutesStr;
-        
-        };
-    }]
-)
-
-
- /**
-   *  @ngdoc directive
-   *  @name ui.grid.edit.directive:uiGridEditDropdown
-   *  @element div
-   *  @restrict A
-   *
-   *  @description dropdown editor for editable fields.
-   *  Provides EndEdit and CancelEdit events
-   *
-   *  Events that end editing:
-   *     blur and enter keydown, and any left/right nav
-   *
-   *  Events that cancel editing:
-   *    - Esc keydown
-   *
-   */
-
-
-/**
-
- * @ngdoc directive
- * @name tvur.services.directive:minutesFormatter
- * 
- * @description
- * Attach to a input text field to convert mintues since midnight to time
- * 
-*/
-.directive('minutesFormatter', function($filter) {
-    return {
-        require: 'ngModel',
-        link: function(scope, element, attrs, ngModelController) {
-
-        /*  
-            ngModelController.$parsers.push(function(data) {
-                //convert data from view format to model format
-                return data; //converted
-            });
-        */
-            ngModelController.$formatters.push(function(data) {
-                //convert data from model format to view format
-                var formatFilter = $filter('minutesFilter');
-                var formattedData = formatFilter(data); // why not???
-                return formattedData; //converted
-            });
-        },
-
-        restrict: 'A',
-    }
-})
+;
 
 
 

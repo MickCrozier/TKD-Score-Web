@@ -15,10 +15,10 @@
 		<div id="displaylogo" class="scoreboard-logo"></div>
 	</div>
 
-	<div class="notregistered-overlay" ng-hide="matJudgeVm.registered()">Device needs to be registered for this mat <button class="btn btn-primary btn-sm btn-block" ng-click="matJudgeVm.register()">Register Now</button>
+	<div class="notregistered-overlay" ng-hide="matJudgeVm.registered()">Device needs to be registered for mat {{matJudgeVm.mat.number}} <button class="btn btn-primary btn-sm btn-block" ng-click="matJudgeVm.register()">Register Now</button>
 	</div>
 
-	<div class="registered-overlay" ng-show="matJudgeVm.registered()" ng-bind="matJudgeVm.registered()">
+	<div class="registered-overlay" ng-show="matJudgeVm.registered()" ng-bind="'Mat ' + matJudgeVm.mat.number + ' ' + matJudgeVm.registered()">
 	</div>
 
 

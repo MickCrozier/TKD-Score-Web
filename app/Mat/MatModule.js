@@ -3,9 +3,12 @@
 
     var Module = angular.module('tkdscore.mat', [ // list dependancies
         'bsol.session',
+        'bsol.common',
         'ui.bootstrap',
         'sailsResource',
         'ngDialog',
+        'cfp.hotkeys',
+
     ])
 
     .config(['$stateProvider',
@@ -153,6 +156,17 @@
             })
         }
 
+        ms.registerTurn = function (id, player) {
+
+            $sailsSocket.post('/api/mat/controls/registerturn', {id:id, player: player})
+            .success(function(resp) {
+
+            })
+            .error(function(resp) {
+                console.error('controls error', resp);
+            })
+        }
+
         ms.registerJudge = function (id) {
             console.log('heelo');
             $sailsSocket.post('/api/mat/judge', {id:id})
@@ -265,21 +279,21 @@
                 
                 for(var i = 0; i<Math.floor(penalties); i++) {
                     //r+= '&#x2588 ';
-                    r+= '<img src="/images/mark_gamjeom.png" class="scoreboard-mark">';
+                    r+= '<img src="images/mark_gamjeom.png" class="scoreboard-mark">';
                     filled++;
                 }
                 
                 if(Math.floor(num/2) !== penalties && penalties !== 0) {
                     //r+= '&#x2584 ' ;
 
-                    r+= '<img src="/images/mark_kyongo.png" class="scoreboard-mark">';
+                    r+= '<img src="images/mark_kyongo.png" class="scoreboard-mark">';
                     filled++;
                 }
 
                 
                 while(filled < 4) {
                     //r+= '_ ' ;
-                    r+= '<img src="/images/mark_blank.png" class="scoreboard-mark">';
+                    r+= '<img src="images/mark_blank.png" class="scoreboard-mark">';
                     filled++;    
                 }
                 return r;
@@ -291,7 +305,7 @@
         return {
             scope: {},
             controllerAs: 'matListVm',
-            controller: ['$scope', '$state', 'MatUI', 'MatManager', function($scope, $state, MatUI, MatManager) {
+            controller: ['$scope', '$state', 'MatUI', 'MatManager', 'AlertService', function($scope, $state, MatUI, MatManager, AlertService) {
                 
         
                 function gotoControls(mat) {
@@ -304,7 +318,10 @@
 
                 function destroy(mat) {
                     // TODO - ask
-                    MatManager.destroy(mat);
+
+                    AlertService.areYouSure(null, function(){
+                        MatManager.destroy(mat);
+                    });
                 }
 
                 function gotoMaster(mat) {
@@ -442,47 +459,62 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-controls.html',
             controllerAs: 'matControlsVm',
-            controller: ['$scope', 'AlertService', 'Mat', 'MatUI', '$cookieStore', function($scope, AlertService, Mat, MatUI, $cookieStore){
+            controller: ['$scope', 'AlertService', 'Mat', 'MatUI', '$cookieStore', 'hotkeys', function($scope, AlertService, Mat, MatUI, $cookieStore, hotkeys){
+                var mat = {};
                 if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
-                    this.mat = Mat.findOne($scope.mat);
+                    mat = Mat.findOne($scope.mat);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.mat = $scope.mat;
+                    mat = $scope.mat;
                 }
 
+                hotkeys.bindTo($scope).add({
+                    combo: 'space',
+                    description: 'Register Turning Kick',
+                    callback: function(e, hotkey) {
+                        e.preventDefault();
+                        registerTurn();
+                    },
+                })
+
                 function changeRound(val) {
-                    Mat.changeRound(this.mat.id, this.mat.round + val);
+                    Mat.changeRound(mat.id, mat.round + val);
                 };
 
                 function points(player, points) {
-                    Mat.points(this.mat.id, player, points);
+                    Mat.points(mat.id, player, points);
                 };
 
                 function penalties(player, points) {
-                    Mat.penalties(this.mat.id, player, points);
+                    Mat.penalties(mat.id, player, points);
                 };
 
                 function resetMat() {
-                    Mat.resetMat(this.mat.id);
+                    Mat.resetMat(mat.id);
                 };
 
                 function pauseResume() {
-                    Mat.pauseResume(this.mat.id);
+                    Mat.pauseResume(mat.id);
                 };
 
                 function soundHorn() {
-                    Mat.soundHorn(this.mat.id);
+                    Mat.soundHorn(mat.id);
                 };
 
                 function edit() {
-                    MatUI.openEdit(this.mat);
+                    MatUI.openEdit(mat);
                 }
 
                 function removeJudge(judge) {
-                    Mat.removeJudge(this.mat.id, judge)
+                    Mat.removeJudge(mat.id, judge)
                 }
 
+                function registerTurn() {
+                    Mat.registerTurn(mat.id)
+                }
+
+                this.mst = mat;
                 this.edit = edit;
                 this.points = points;
                 this.penalties = penalties;
@@ -490,6 +522,7 @@
                 this.pauseResume = pauseResume;
                 this.soundHorn = soundHorn;
                 this.changeRound = changeRound;
+                this.registerTurn = registerTurn
 
             
             }],
@@ -516,12 +549,13 @@
             controllerAs: 'matJudgeVm',
             controller: ['$scope', 'AlertService', 'Mat', 'MatUI', 'SessionService', function($scope, AlertService, Mat, MatUI, SessionService){
                 var self = this;
+                var mat = {};
                 if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
-                    this.mat = Mat.findOne($scope.mat);
+                    mat = Mat.findOne($scope.mat);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.mat = $scope.mat;
+                    mat = $scope.mat;
                 }
 
                 var timers = {
@@ -558,12 +592,12 @@
                         turning = true;
                     }
                     //console.log('Sending Taps', player, target, turning)
-                    Mat.registerScore(self.mat.id, player, target, turning)
+                    Mat.registerScore(mat.id, player, target, turning)
                 }
 
 
                 function register() {
-                    Mat.registerJudge(this.mat.id);
+                    Mat.registerJudge(mat.id);
                 }
 
                 
@@ -571,10 +605,10 @@
 
                 function registered() {
                     var judges = [
-                        this.mat.judge1,
-                        this.mat.judge2,
-                        this.mat.judge3,
-                        this.mat.judge4,
+                        mat.judge1,
+                        mat.judge2,
+                        mat.judge3,
+                        mat.judge4,
                     ];
                   
 
@@ -590,9 +624,11 @@
                     return reg;
                 }
 
+
                 this.tap = tap;
                 this.register = register;
                 this.registered = registered;
+                this.mat = mat;
 
             
             }],
@@ -642,18 +678,18 @@
             controller: ['$scope', '$timeout', '$sailsSocket', 'ngNotify', 'Mat', 'MatUI', function($scope, $timeout, $sailsSocket, ngNotify, Mat, MatUI){
                 var self = this;
                 var horn = new Audio('sounds/beep1.wav');
-
+                var mat = {};
                 if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
-                    this.mat = Mat.findOne($scope.mat);
+                    mat = Mat.findOne($scope.mat);
                 } else {
                     // if not - assume it is the item and work with it directly
-                    this.mat = $scope.mat;
+                    mat = $scope.mat;
                 }
 
                 this.timer = {
-                    roundTimeMS: this.mat.roundTimeMS,
-                    breakTimeMS: this.mat.breakTimeMS,
+                    roundTimeMS: mat.roundTimeMS,
+                    breakTimeMS: mat.breakTimeMS,
                     pauseWatchMS: 0,
                 };
 
@@ -679,23 +715,24 @@
                 }
 
                 var judgeIndicator = {};
-                judgeIndicator[1] = [0,0,0,0];
-                judgeIndicator[2] = [0,0,0,0];
+                judgeIndicator[1] = ['-','-','-','-'];
+                judgeIndicator[2] = ['-','-','-','-'];
                     
 
 
                 $sailsSocket.subscribe('judge', function(resp) {    
 
-                    console.log('JUDGE: ', resp.source, resp.player, resp.points);
+                    console.log('JUDGE: ', resp.source, resp.player, resp.target);
                     //ngNotify.set('JUDGE: ' + resp.judge + ' (' + resp.source + ') ' + PLAYER_TITLE[resp.player] + ' ' + resp.points + ' points');
                     
-                    showJudgeIndicator(resp.judge, resp.player, resp.points);
+                    var indicatorText = resp.target.charAt(0).toUpperCase();
+                    showJudgeIndicator(resp.judge, resp.player, indicatorText);
                 });
 
-                function showJudgeIndicator(judge, player, points) {
-                    judgeIndicator[player][judge - 1] = points;
+                function showJudgeIndicator(judge, player, text) {
+                    judgeIndicator[player][judge - 1] = text;
                     $timeout(function() {
-                        judgeIndicator[player][judge - 1] = 0;
+                        judgeIndicator[player][judge - 1] = '-';
                     }, self.mat.scoreTimeout * 0.75);
                 }
 
@@ -703,7 +740,7 @@
 
                 
                 this.judgeIndicator = judgeIndicator;
-
+                this.mat = mat;
 
 
             

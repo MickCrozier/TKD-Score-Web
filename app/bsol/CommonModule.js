@@ -112,249 +112,37 @@ angular.module('bsol.common', [
 
 
 
+/**
 
-.directive('bsolEditListButton', [
+ * @ngdoc service
+ * @name bsol.common.service:errorHandler
+ * 
+ * @description
+ * Generic functionality for ngGrid
+ *
+ * returns array of objects representing the list
+*/
+.service('ErrorHandler', ['AlertService', function(AlertService) {
+        var errorHandler = function(errorData) {
+            var err = errorData;
+            if(err.$response) {
+                err = err.$response.data;
+            }
 
-    function() {
-        // Runs during compile
-        return {
-            // name: '',
-            // priority: 1,
-            // terminal: true,
-            scope: {
-                //ngModel: '=',
-                bsListname: '@',
-                bsListkeys: '=',
-                bsListdata: '=',
-                bsNewdata: '=',
-            },
-            controller: ['$scope', '$element', '$attrs', '$transclude', '$modal',
-                function($scope, $element, $attrs, $transclude, $modal) {
-
-                    $scope.onEditClick = function(e) {
-                        var editBox = $modal.open({
-                            //template: '<div class="modal-body">' + msg + '</div>',
-                            scope: $scope,
-                            template: '<div bs-edit-list bs-listname="' + $attrs.bsolListname + '" bs-listkeys="' + $attrs.bsolListkeys + '" bs-listdata="' + 'bsListdata' + '" bs-newdata="' + 'bsNewdata' + '"></div>',
-                            //templateUrl: 'vies/bs/editlist.html',
-                            controller: ['$scope', '$modalInstance',
-
-                                function($scope, $modalInstance) {                                    $scope.onCloseClick = function(e) {
-                                        $modalInstance.close();
-                                    };
-                                }
-                            ]
-
-                        });
-
-                    };
-                }
-            ],
-            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-            restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
-            template: '<button type="button" class="btn btn-primary btn-xs" ng-click="onEditClick($event)" tooltip="Edit {{bsListname}} list"><span class="glyphicon glyphicon-edit"></span></button>',
-            //templateUrl: '',
-            // transclude: true,
-            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
-            link: function($scope, iElm, iAttrs, controller) {
-
+            if(err) {
+                AlertService.addAlert(err);
+            
+                
+            } else {
+                console.error(err);
+                AlertService.addAlert('Critical Error - check console log', 'danger');
             }
         };
-    }
-])
+
+        return errorHandler;
+}])
 
 
-
-
-
-
-.directive('bsolDropList', [
-
-    function() {
-        // Runs during compile
-        return {
-            //name: '',
-            priority: 1,
-            // terminal: true,
-            scope: {
-                ngModel: '=',
-                ngBlur: '&',
-                ngChange: '&',
-                bsolListdata: '=',
-            }, // {} = isolate, true = child, false/undefined = no change
-
-            controller: ['$scope', '$element', '$attrs', '$transclude', '$modal',
-                function($scope, $element, $attrs, $transclude, $modal) {
-                    //$scope.bsolListService = bsListService;
-
-                    //bsListService.updateList($scope.bsolListname)
-
-
-                    $scope.onItemClick = function(e, item) {
-                        //$scope.ngModel = item.id;
-                       // $scope.ngChange({
-                        //    $event: e
-                       // });
-                    };
-
-                    $scope.onItemSelect = function(e) {
-                        setTimeout(function() {
-                            //$scope.ngChange({
-                            //    $event: e
-                            //});
-                        }, 1);
-                    };
-
-
-
-
-                }
-            ],
-            require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-            restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'bsol/view/dropdown.html',
-            // transclude: true,
-            //compile: function(tElement, tAttrs) {},
-
-            link: function($scope, iElm, iAttrs, ngModelController) {
-
-            }
-        };
-    }
-])
-
-
-
-.directive('bsolEditList', [
-
-    function() {
-        // Runs during compile
-        return {
-            // name: '',
-            // priority: 1,
-            // terminal: true,
-            scope: {
-                //ngModel: '=',
-                bsolListdata: '=',
-                bsolNewdata: '=',
-            }, // {} = isolate, true = child, false/undefined = no change
-            controller: 'EditListController',
-            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-            restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
-            // template: '',
-            templateUrl: 'bsol/views/editlist.html',
-            // transclude: true,
-            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
-            link: function($scope, iElm, iAttrs, bsListService) {
-
-            }
-        };
-    }
-])
-
-.controller('EditListController', ['$scope', '$element', '$attrs', '$transclude', 'bsStateService', '$modal', 'AlertService',
-    function($scope, $element, $attrs, $transclude, bsStateService, $modal, AlertService) {
-
-        $scope.newItem = {};
-        _.extend($scope.newItem, $scope.bsolNewdata);
-        
-
-        $scope.onAddClick = function(e) {
-            e.stopPropagation();
-    
-            $scope.bsolListdata.$post($scope.newItem).then(function success(item) {
-                $scope.newForm.$setPristine();
-                $scope.bsolListdata.push(item);
-            }, function fail(err) {
-                alert(err);
-            });
-        };
-
-        $scope.onFieldBlur = function(e, row, form) {
-            e.stopPropagation();
-            console.log('calling blur');
-            row.$put().$promise.then(function success(item) {
-                form.$setPristine();
-            }, function fail(err) {
-
-            });
-        };
-
-        $scope.onRemoveClick = function(e, row) {
-            e.stopPropagation();
-            AlertService.areYouSure('Do you want to remove this item?', function yes() {
-                row.$destroy().$promise.then(function success() {
-                    var index = $scope.bsolListdata.indexOf(row);
-                    $scope.bsolListdata.splice(index, 1);
-                }, function fail() {
-
-                });
-            }, function no() {
-                console.log('delete canceled');
-            });
-        };
-    }
-])
-
-
-.directive('bsolIncludeList', [
-
-    function() {
-        // Runs during compile
-        return {
-            // name: '',
-            // priority: 1,
-            // terminal: true,
-            scope: {
-                //ngModel: '=',
-                bsListname: '@',
-                bsListtitles: '=',
-                bsListkeys: '=',
-                bsListdata: '=',
-                bsNewdata: '=',
-            }, // {} = isolate, true = child, false/undefined = no change
-            controller: 'IncludelistController',
-            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-            restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
-            // template: '',
-            templateUrl: 'bsol/views/includelist.html',
-            // transclude: true,
-            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
-            link: function($scope, iElm, iAttrs, bsListService) {
-
-            }
-        };
-    }
-])
-
-.controller('IncludelistController', ['$scope', '$element', '$attrs', '$transclude', 'bsStateService', '$modal', 'AlertService',
-    function($scope, $element, $attrs, $transclude, bsStateService, $modal, AlertService) {
-
-        $scope.newItem = {};
-        _.extend($scope.newItem, $scope.bsolNewdata);
-        
-
-        $scope.onDetailClick = function(e, row) {
-            e.stopPropagation();
-            row.goToDetail();
-        };
-
-
-        $scope.onRemoveClick = function(e, row) {
-            e.stopPropagation();
-            AlertService.areYouSure('Do you want to remove this item?', function yes() {
-                row.remove().then(function success() {
-                    var index = $scope.bsolListdata.indexOf(row);
-                    $scope.bsolListdata.splice(index, 1);
-                }, function fail() {
-
-                });
-            }, function no() {
-                console.log('delete canceled');
-            });
-        };
-    }
-])
 
 
 /**
@@ -454,97 +242,4 @@ angular.module('bsol.common', [
     };
 }])
 
-/**
-
- * @ngdoc directive
- * @name tvur.services.directive:genericGrid
- * 
- * @description
- * A generic customisable grid for top level lists
- * 
-*/
-.directive('genericGrid', function(){
-        // Runs during compile
-        return {
-            scope: {
-                gridOptions: '=',
-                datastore: '=',
-              
-            }, // {} = isolate, true = child, false/undefined = no change
-            controller: ['$scope', '$element', '$attrs', '$transclude', 'ErrorHandler', 'CommonGrid', 'AlertService', function($scope, $element, $attrs, $transclude, ErrorHandler, CommonGrid, AlertService) {
-                
-                $scope.gridScope = {
-                    
-                };
-                
-                $scope.datastore.on('collectionupdated', function() {
-                    $scope.gridOptions.data = $scope.datastore.collection;
-                });
-                
-                $scope.remove = function(e) {
-                    $scope.datastore.removeRows($scope.gridApi.selection.getSelectedRows());
-                };
-
-                $scope.add = function(e) {
-                    var baseNewChild = {};
-                    $scope.datastore.addNoSync(baseNewChild);  
-                };
-            }],
-
-            //require: 'parent', // Array = multiple requires, ? = optional, ^ = check parent elements
-            restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
-            templateUrl: 'bsol/views/template-generic-grid.html',
-            
-            link: function($scope, iElm, iAttrs, controller) {
-                
-            }
-        };
-    })
-
-.service('GenericUI', ['ngDialog', function(ngDialog){
-     this.openEditGrid = function(datastore, gridOptions) {
-        var dialog = ngDialog.open({
-            plain: true,
-            className: 'ngdialog-theme-normal',
-            template:'<generic-grid datastore="datastore" grid-options="gridOptions"></generic-grid>',
-            
-            controller: ['$scope',
-                function($scope) {
-                    $scope.gridOptions = gridOptions;
-                    $scope.datastore = datastore;
-                }
-            ]
-        });
-        return dialog.closePromise;
-     }; 
-
-     this.ask = function(question) {
-        var dialog = ngDialog.open({
-            plain: false,
-            className: 'ngdialog-theme-normal',
-            template:'bsol/views/template-question.html',
-            
-            controller: ['$scope',
-                function($scope) {
-                  
-                    $scope.question = question;
-                    $scope.answer = '';
-
-                    $scope.ok = function(e) {
-                        e.stopPropagation();
-                        $scope.closeThisDialog($scope.answer);
-                    };
-
-                    $scope.cancel = function(e) {
-                        e.stopPropagation();
-                        $scope.closeThisDialog();
-                    };
-                }
-            ]
-        });
-        return dialog.closePromise;
-     }; 
-
-
-}])
 ;
