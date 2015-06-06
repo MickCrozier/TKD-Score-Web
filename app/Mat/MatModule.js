@@ -11,8 +11,7 @@
 
     ])
 
-    .config(['$stateProvider',
-        function($stateProvider) {
+    .config(function($stateProvider) {
             $stateProvider
             .state('matlist', {
                 url: '/matlist/',
@@ -64,19 +63,19 @@
 
             
         }
-    ])
+    )
 
-    .controller('MatlistController', ['$scope', '$stateParams', 'MatUI', 'Mat', '$cookieStore', function($scope, $stateParams, MatUI, Mat, $cookieStore){
+    .controller('MatlistController', function($scope, $stateParams, MatUI, Mat, $cookieStore){
         
-    }])
+    })
 
-    .controller('MatController', ['resolvedMat', function(resolvedMat){
+    .controller('MatController', function(resolvedMat){
         this.mat = resolvedMat;
-    }])
+    })
 
 
 
-    .factory('Mat', ['$sailsResource', '$sailsSocket', '$cookieStore', function($sailsResource, $sailsSocket, $cookieStore){
+    .factory('Mat', function($sailsResource, $sailsSocket, $cookieStore){
         var ms = $sailsResource('mat', "/api/mat/:id", { id: '@id' })
         ms.$name = 'mat';
 
@@ -190,7 +189,7 @@
 
         return ms;
 
-    }])
+    })
 
         /**
      * @ngdoc service
@@ -200,7 +199,7 @@
      * Takes care of managing the mat list
      *
     */
-    .service('MatManager', ['ListManager', 'Mat', function(ListManager, Mat){
+    .service('MatManager', function(ListManager, Mat){
 
         return new ListManager({
             parentDataModel: null,
@@ -209,7 +208,7 @@
             hasParent: false,
         })
 
-    }])
+    })
 
 
     /**
@@ -222,44 +221,41 @@
      * isCountDown adds 999 milliseconds to display - to 0 is triggered when it changes to 0
      * rather than 1 second later
      */
-    .filter('formatTime', [
+    .filter('formatTime', function() {
+        return function(rawtime, isCountDown) {
 
-        function() {
-            return function(rawtime, isCountDown) {
+            var adjustedTime = rawtime;
+            // when counting down need to add time on the display so that timers will appear to stop SMACK ON 00:00
+            if(isCountDown) { 
+              adjustedTime = rawtime + 999; 
+            }
 
-                var adjustedTime = rawtime;
-                // when counting down need to add time on the display so that timers will appear to stop SMACK ON 00:00
-                if(isCountDown) { 
-                  adjustedTime = rawtime + 999; 
-                }
+            var ds = Math.round(adjustedTime/100) + '';
+            var sec = Math.floor(adjustedTime/1000);
+            var min = Math.floor(adjustedTime/60000);
+            ds = ds.charAt(ds.length - 1);
 
-                var ds = Math.round(adjustedTime/100) + '';
-                var sec = Math.floor(adjustedTime/1000);
-                var min = Math.floor(adjustedTime/60000);
-                ds = ds.charAt(ds.length - 1);
+            sec = sec - 60 * min + '';
 
-                sec = sec - 60 * min + '';
+            if(sec.charAt(sec.length - 2) !== '') {
+              sec = sec.charAt(sec.length - 2) + sec.charAt(sec.length - 1);
+            } else {
+              sec = 0 + sec.charAt(sec.length - 1);
+            } 
+            min = min + '';
 
-                if(sec.charAt(sec.length - 2) !== '') {
-                  sec = sec.charAt(sec.length - 2) + sec.charAt(sec.length - 1);
-                } else {
-                  sec = 0 + sec.charAt(sec.length - 1);
-                } 
-                min = min + '';
-
-                if(min.charAt(min.length - 2) !== '')
-                {
-                  min = min.charAt(min.length - 2)+min.charAt(min.length - 1);
-                } else {
-                  min = 0 + min.charAt(min.length - 1);
-                }
-                //return min + ':' + sec + ':' + ds;
-                return min + ':' + sec;
-            };
+            if(min.charAt(min.length - 2) !== '')
+            {
+              min = min.charAt(min.length - 2)+min.charAt(min.length - 1);
+            } else {
+              min = 0 + min.charAt(min.length - 1);
+            }
+            //return min + ':' + sec + ':' + ds;
+            return min + ':' + sec;
+        };
 
 
-        }
-    ])
+    })
 
     /**
      * @ngdoc filter
@@ -269,43 +265,40 @@
      * @description
      * Converts number into html images
      */
-    .filter('formatPenalties', [
+    .filter('formatPenalties', function() {
+        return function(num) {
+            var r = '';
+            var penalties = (num/2);
+            var filled = 0;
+            
+            for(var i = 0; i<Math.floor(penalties); i++) {
+                //r+= '&#x2588 ';
+                r+= '<img src="images/mark_gamjeom.png" class="scoreboard-mark">';
+                filled++;
+            }
+            
+            if(Math.floor(num/2) !== penalties && penalties !== 0) {
+                //r+= '&#x2584 ' ;
 
-        function() {
-            return function(num) {
-                var r = '';
-                var penalties = (num/2);
-                var filled = 0;
-                
-                for(var i = 0; i<Math.floor(penalties); i++) {
-                    //r+= '&#x2588 ';
-                    r+= '<img src="images/mark_gamjeom.png" class="scoreboard-mark">';
-                    filled++;
-                }
-                
-                if(Math.floor(num/2) !== penalties && penalties !== 0) {
-                    //r+= '&#x2584 ' ;
+                r+= '<img src="images/mark_kyongo.png" class="scoreboard-mark">';
+                filled++;
+            }
 
-                    r+= '<img src="images/mark_kyongo.png" class="scoreboard-mark">';
-                    filled++;
-                }
+            
+            while(filled < 4) {
+                //r+= '_ ' ;
+                r+= '<img src="images/mark_blank.png" class="scoreboard-mark">';
+                filled++;    
+            }
+            return r;
+        };
+    })
 
-                
-                while(filled < 4) {
-                    //r+= '_ ' ;
-                    r+= '<img src="images/mark_blank.png" class="scoreboard-mark">';
-                    filled++;    
-                }
-                return r;
-            };
-        }
-    ])
-
-    .directive('matList', [function(){
+    .directive('matList', function(){
         return {
             scope: {},
             controllerAs: 'matListVm',
-            controller: ['$scope', '$state', 'MatUI', 'MatManager', 'AlertService', function($scope, $state, MatUI, MatManager, AlertService) {
+            controller: function($scope, $state, MatUI, MatManager, AlertService) {
                 
         
                 function gotoControls(mat) {
@@ -345,7 +338,7 @@
                 this.gotoJudge = gotoJudge;
                 this.newMat = newMat;
                 this.destroy = destroy;
-            }],
+            },
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-list.html',
             
@@ -353,7 +346,7 @@
                 
             }
         };
-    }])
+    })
 
 
 
@@ -367,7 +360,7 @@
  * A collection of UI helpers that can be called in js
  *
 */
-    .service('MatUI', ['ngDialog', function(ngDialog){
+    .service('MatUI', function(ngDialog){
 
         // Opens a dialog containg the cuebuilder directive for editing cues.
         // accepts either the cue id or the cue model itself
@@ -387,7 +380,7 @@
             return dialog.closePromise;
         };
 
-    }])
+    })
 
 
 
@@ -403,7 +396,7 @@
  *
  * <pre> <mateditor> item="myIdOrMyMatItem"></mateditor> </pre>
 */
-    .directive('mateditor', [ function(){
+    .directive('mateditor', function(){
         // Runs during compile
         return {
             // name: '',
@@ -416,7 +409,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-edit.html',
             controllerAs: 'matEditorVm',
-            controller: ['$scope', 'AlertService', 'Mat', function($scope, AlertService, Mat){
+            controller: function($scope, AlertService, Mat){
                 if(angular.isNumber(this.item)) {
                     // if it's ID - get the relevant data
                     this.mat = Mat.findOne($scope.item);
@@ -436,7 +429,7 @@
                 this.save = save;
                 this.removeJudge = removeJudge;
 
-            }],
+            },
 
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
@@ -444,9 +437,9 @@
                 
             }
         };
-    }])
+    })
 
-    .directive('matControls', [ function(){
+    .directive('matControls', function(){
         // Runs during compile
         return {
             // name: '',
@@ -459,7 +452,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-controls.html',
             controllerAs: 'matControlsVm',
-            controller: ['$scope', 'AlertService', 'Mat', 'MatUI', '$cookieStore', 'hotkeys', function($scope, AlertService, Mat, MatUI, $cookieStore, hotkeys){
+            controller: function($scope, AlertService, Mat, MatUI, $cookieStore, hotkeys){
                 var mat = {};
                 if(angular.isNumber($scope.mat)) {
                     // if it's ID - get the relevant data
@@ -525,16 +518,16 @@
                 this.registerTurn = registerTurn
 
             
-            }],
+            },
 
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
 
             }
         };
-    }])
+    })
 
-    .directive('matJudge', [ function(){
+    .directive('matJudge', function(){
         // Runs during compile
         return {
             // name: '',
@@ -547,7 +540,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-judge.html',
             controllerAs: 'matJudgeVm',
-            controller: ['$scope', 'AlertService', 'Mat', 'MatUI', 'SessionService', function($scope, AlertService, Mat, MatUI, SessionService){
+            controller: function($scope, AlertService, Mat, MatUI, SessionService){
                 var self = this;
                 var mat = {};
                 if(angular.isNumber($scope.mat)) {
@@ -570,18 +563,25 @@
                 
 
                 function tap(player, target) {
-                  
-                    taps[player][target] += 1;
+                
+                    if(mat.judgeTurning) {
+                        // Corner judges double tap for  turning kick
+                        taps[player][target] += 1;
 
-                    if(timers[player] === null) {
-                        timers[player] = setTimeout(function() {
-                            
-                            tranmitTaps(player, taps[player][target], target);
+                        if(timers[player] === null) {
+                            timers[player] = setTimeout(function() {
+                                
+                                tranmitTaps(player, taps[player][target], target);
 
-                            timers[player] = null;
-                            taps[player][target] = 0;
-                        }, 250);
+                                timers[player] = null;
+                                taps[player][target] = 0;
+                            }, 250);
+                        }
+                    } else {
+                        // Only the master control can register the turning kick - so send the tap straight away
+                        tranmitTaps(player, 1, target);
                     }
+                    
 
                 };
 
@@ -631,16 +631,16 @@
                 this.mat = mat;
 
             
-            }],
+            },
 
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
 
             }
         };
-    }])
+    })
 
-    .directive('highlightOnChange', ['$timeout', function($timeout) {
+    .directive('highlightOnChange', function($timeout) {
         return {
 
             scope: {
@@ -660,9 +660,9 @@
                 })
             }
         };
-    }])
+    })
 
-    .directive('scoreboard', [ function(){
+    .directive('scoreboard', function(){
         // Runs during compile
         return {
             // name: '',
@@ -675,7 +675,7 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-scoreboard.html',
             controllerAs: 'scoreboardVm',
-            controller: ['$scope', '$timeout', '$sailsSocket', 'ngNotify', 'Mat', 'MatUI', function($scope, $timeout, $sailsSocket, ngNotify, Mat, MatUI){
+            controller: function($scope, $timeout, $sailsSocket, ngNotify, Mat, MatUI){
                 var self = this;
                 var horn = new Audio('sounds/beep1.wav');
                 var mat = {};
@@ -744,7 +744,7 @@
 
 
             
-            }],
+            },
 
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
@@ -752,9 +752,9 @@
                 
             }
         };
-    }])
+    })
 
-    .service('MatService', ['Mat', function(Mat) {
+    .service('MatService', function(Mat) {
         this.Model = Mat;
         this.item = {};
 
@@ -773,10 +773,7 @@
             return self.item;
         }
 
-    }])
-
-
-
+    })
 
 
 
