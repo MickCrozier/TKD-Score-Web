@@ -761,6 +761,7 @@
         var self = this;
 
         this.get = function(id) {
+            /*
             if(!id) {
                 return self.item;
             }
@@ -770,6 +771,10 @@
             } else {
                 self.item = this.Model.findOne({id:id})
             }
+            return self.item;
+            */
+            console.log('getting item from server');
+            self.item = this.Model.findOne({id:id})
             return self.item;
         }
 

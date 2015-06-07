@@ -81,7 +81,7 @@ var Module = angular.module('qtime.services', [
                 }
 
                 var getListNoParent = function() {
-                    console.log('Getting ' + self.dataModel.$name + ' for all')
+                    console.log('Getting all ' + self.dataModel.$name + '(s)')
                     var search = {};
                     if(self.populate) {
                         search.populate = self.populate;
