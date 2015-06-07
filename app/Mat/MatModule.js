@@ -662,6 +662,77 @@
         };
     })
 
+    .controller('scoreboardController', function($scope, $timeout, $sailsSocket, ngNotify, Mat, MatUI){
+        var self = this;
+        var horn = new Audio('sounds/beep1.wav');
+        var mat = {};
+        if(angular.isNumber($scope.mat)) {
+            // if it's ID - get the relevant data
+            mat = Mat.findOne($scope.mat);
+        } else {
+            // if not - assume it is the item and work with it directly
+            mat = $scope.mat;
+        }
+
+        this.timer = {
+            roundTimeMS: mat.roundTimeMS,
+            breakTimeMS: mat.breakTimeMS,
+            pauseWatchMS: 0,
+        };
+
+        $sailsSocket.subscribe('roundtime', function(resp) {
+            self.timer.roundTimeMS = resp.ms;
+        });
+
+        $sailsSocket.subscribe('pausetime', function(resp) {
+            self.timer.pauseWatchMS = resp.ms;
+        });
+
+        $sailsSocket.subscribe('breaktime', function(resp) {
+            self.timer.breakTimeMS = resp.ms;
+        });
+
+        $sailsSocket.subscribe('soundhorn', function(resp) {
+            horn.play();
+        });
+
+        var PLAYER_TITLE = {
+            1: 'Hong',
+            2: 'Chong',
+        }
+
+        var judgeIndicator = {};
+        judgeIndicator[1] = ['-','-','-','-'];
+        judgeIndicator[2] = ['-','-','-','-'];
+            
+
+
+        $sailsSocket.subscribe('judge', function(resp) {    
+
+            console.log('JUDGE: ', resp.source, resp.player, resp.target);
+            //ngNotify.set('JUDGE: ' + resp.judge + ' (' + resp.source + ') ' + PLAYER_TITLE[resp.player] + ' ' + resp.points + ' points');
+            
+            var indicatorText = resp.target.charAt(0).toUpperCase();
+            showJudgeIndicator(resp.judge, resp.player, indicatorText);
+        });
+
+        function showJudgeIndicator(judge, player, text) {
+            judgeIndicator[player][judge - 1] = text;
+            $timeout(function() {
+                judgeIndicator[player][judge - 1] = '-';
+            }, self.mat.scoreTimeout * 0.75);
+        }
+
+
+
+        
+        this.judgeIndicator = judgeIndicator;
+        this.mat = mat;
+
+
+    
+    })
+
     .directive('scoreboard', function(){
         // Runs during compile
         return {
@@ -675,76 +746,30 @@
             restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
             templateUrl: 'mat/views/template-scoreboard.html',
             controllerAs: 'scoreboardVm',
-            controller: function($scope, $timeout, $sailsSocket, ngNotify, Mat, MatUI){
-                var self = this;
-                var horn = new Audio('sounds/beep1.wav');
-                var mat = {};
-                if(angular.isNumber($scope.mat)) {
-                    // if it's ID - get the relevant data
-                    mat = Mat.findOne($scope.mat);
-                } else {
-                    // if not - assume it is the item and work with it directly
-                    mat = $scope.mat;
-                }
+            controller: 'scoreboardController',
 
-                this.timer = {
-                    roundTimeMS: mat.roundTimeMS,
-                    breakTimeMS: mat.breakTimeMS,
-                    pauseWatchMS: 0,
-                };
-
-                $sailsSocket.subscribe('roundtime', function(resp) {
-                    self.timer.roundTimeMS = resp.ms;
-                });
-
-                $sailsSocket.subscribe('pausetime', function(resp) {
-                    self.timer.pauseWatchMS = resp.ms;
-                });
-
-                $sailsSocket.subscribe('breaktime', function(resp) {
-                    self.timer.breakTimeMS = resp.ms;
-                });
-
-                $sailsSocket.subscribe('soundhorn', function(resp) {
-                    horn.play();
-                });
-
-                var PLAYER_TITLE = {
-                    1: 'Hong',
-                    2: 'Chong',
-                }
-
-                var judgeIndicator = {};
-                judgeIndicator[1] = ['-','-','-','-'];
-                judgeIndicator[2] = ['-','-','-','-'];
-                    
-
-
-                $sailsSocket.subscribe('judge', function(resp) {    
-
-                    console.log('JUDGE: ', resp.source, resp.player, resp.target);
-                    //ngNotify.set('JUDGE: ' + resp.judge + ' (' + resp.source + ') ' + PLAYER_TITLE[resp.player] + ' ' + resp.points + ' points');
-                    
-                    var indicatorText = resp.target.charAt(0).toUpperCase();
-                    showJudgeIndicator(resp.judge, resp.player, indicatorText);
-                });
-
-                function showJudgeIndicator(judge, player, text) {
-                    judgeIndicator[player][judge - 1] = text;
-                    $timeout(function() {
-                        judgeIndicator[player][judge - 1] = '-';
-                    }, self.mat.scoreTimeout * 0.75);
-                }
-
-
+            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
+            link: function($scope, iElm, iAttrs, controller) {
 
                 
-                this.judgeIndicator = judgeIndicator;
-                this.mat = mat;
+            }
+        };
+    })
 
-
-            
-            },
+    .directive('miniboard', function(){
+        // Runs during compile
+        return {
+            // name: '',
+            // priority: 1,
+            // terminal: true,
+            scope: {
+                mat: '=',
+            }, // {} = isolate, true = child, false/undefined = no change
+            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+            restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
+            templateUrl: 'mat/views/template-miniboard.html',
+            controllerAs: 'scoreboardVm',
+            controller: 'scoreboardController',
 
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {

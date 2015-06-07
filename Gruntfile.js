@@ -18,7 +18,7 @@ grunt.loadNpmTasks('grunt-docular');
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: '../tkd-score-server/web'
   };
 
   var sftpConfig = {};
