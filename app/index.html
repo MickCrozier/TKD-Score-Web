@@ -33,7 +33,7 @@
 
     <!-- Add your site or application content here -->
     <div class="">
-      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alerts.closeAlert($index)">{{alert.msg}}</alert>
+      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alerts.closeAlert($index)" ng-bind="alert.msg"></alert>
       <div ui-view="" class="">
       </div>
     </div>

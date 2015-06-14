@@ -4,12 +4,47 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 // bower:scss
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
+
+@import "_bootswatch.scss";
 @import "../bsol/bs.scss";
 @import "../core/ngDialogDefault.scss";
 
 @import "../mat/mat.scss";
 @import "../match/match.scss";
 
+
+///////// Additionl theme /////////
+
+$btn-hong-color:                $btn-default-color !default;
+$btn-hong-bg:                   #f00!default;
+$btn-hong-border:               $btn-hong-bg !default;
+
+$btn-chong-color:               $btn-default-color !default;
+$btn-chong-bg:                  #00f !default;
+$btn-chong-border:              $btn-chong-bg !default;
+
+////////////////////////////////////
+
+
+.btn-hong {
+  @extend .btn-default;
+  @include btn-shadow($btn-hong-bg);
+
+  &:hover {
+    @include btn-shadow-inverse($btn-hong-bg);
+  }
+
+}
+
+.btn-chong {
+  @extend .btn-default;
+  @include btn-shadow($btn-chong-bg);
+
+  &:hover {
+    @include btn-shadow-inverse($btn-chong-bg);
+  }
+
+}
 
 
 BODY {
