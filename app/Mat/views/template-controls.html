@@ -42,7 +42,7 @@
 
   <div class="row">
     <div class="col-lg-12">
-      <button type="button" ng-click="matControlsVm.registerTurn(); $event.stopPropagation();" class="btn btn-lg btn-block btn-warning">Register Turning Kick</button>
+      <button type="button" ng-click="matControlsVm.registerTurn(); $event.stopPropagation();" class="btn btn-lg btn-block btn-warning">Register Turning Kick (space)</button>
     </div>
   </div>
 
@@ -67,6 +67,20 @@
     <div class="col-xs-3">
       <button type="button" ng-click="matControlsVm.edit(); $event.stopPropagation();" class="btn btn-block btn-default">Edit</button>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6" ng-show="!matControlsVm.mat.winner">
+      <button type="button" ng-click="matControlsVm.declareWinner(1); $event.stopPropagation();" class="btn btn-block btn-hong">Hong Su</button>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" ng-show="!matControlsVm.mat.winner" ng-click="matControlsVm.declareWinner(2); $event.stopPropagation();" class="btn btn-block btn-chong">Chong Su</button>
+    </div>
+
+    <div class="col-xs-12">
+      <button type="button" ng-show="matControlsVm.mat.winner" ng-click="matControlsVm.declareWinner(0); $event.stopPropagation();" class="btn btn-block btn-default">Clear Winner</button>
+    </div>
+
   </div>
 
 </div>

@@ -167,7 +167,7 @@
         }
 
         ms.registerJudge = function (id) {
-            console.log('heelo');
+         
             $sailsSocket.post('/api/mat/judge', {id:id})
             .success(function(resp) {
 
@@ -177,13 +177,14 @@
             })
         }
 
-        ms.removeJudge = function (id, judge) {
-            $sailsSocket.post('/api/mat/removejudge', {id:id, judge: judge})
+        ms.declareWinner = function (id, winner) {
+      
+            $sailsSocket.post('/api/mat/winner', {id:id, winner: winner})
             .success(function(resp) {
 
             })
             .error(function(resp) {
-                console.error('Judge Remove Error', resp);
+                console.error('Declare Winner Error', resp);
             })
         }
 
@@ -500,14 +501,18 @@
                 }
 
                 function removeJudge(judge) {
-                    Mat.removeJudge(mat.id, judge)
+                    Mat.removeJudge(mat.id, judge);
                 }
 
                 function registerTurn() {
-                    Mat.registerTurn(mat.id)
+                    Mat.registerTurn(mat.id);
                 }
 
-                this.mst = mat;
+                function declareWinner(winner) {
+                    Mat.declareWinner(mat.id, winner);
+                }
+
+                this.mat = mat;
                 this.edit = edit;
                 this.points = points;
                 this.penalties = penalties;
@@ -515,7 +520,8 @@
                 this.pauseResume = pauseResume;
                 this.soundHorn = soundHorn;
                 this.changeRound = changeRound;
-                this.registerTurn = registerTurn
+                this.registerTurn = registerTurn;
+                this.declareWinner = declareWinner;
 
             
             },

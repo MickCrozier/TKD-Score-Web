@@ -33,4 +33,10 @@
 		<div class="col-xs-6 scoreboard-right scoreboard-score" ng-bind="scoreboardVm.mat.player2Points">
 		</div>
 	</div>
+
+	<div id="displaywinner" class="scoreboard-winner" ng-show="scoreboardVm.mat.winner">
+		<div id="winnerText" class="blink">
+		Winner {{(scoreboardVm.mat.winner == 1 ? scoreboardVm.mat.player1 : scoreboardVm.mat.player2)}}
+		</div>
+	</div>
 </div>

@@ -25,6 +25,10 @@ $btn-chong-border:              $btn-chong-bg !default;
 
 ////////////////////////////////////
 
+.btn:focus {
+  outline:none;
+}
+
 
 .btn-hong {
   @extend .btn-default;
