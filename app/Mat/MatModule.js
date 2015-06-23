@@ -503,7 +503,7 @@
                 };
 
                 function resetMat() {
-                    Mat.resetMat(mat.id);
+                    AlertService.areYouSure("Are you sure you want reset the match?", function(){Mat.resetMat(mat.id);});
                 };
 
                 function pauseResume() {

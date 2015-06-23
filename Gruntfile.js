@@ -530,7 +530,7 @@ grunt.loadNpmTasks('grunt-docular');
     'concat',
     'ngAnnotate',
     'copy:dist',
-    'cdnify',
+    //'cdnify',
     'cssmin',
     'uglify',
     //'filerev',
