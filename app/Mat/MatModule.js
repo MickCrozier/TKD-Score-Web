@@ -206,6 +206,17 @@
             })
         }
 
+        ms.removeJudge = function (id, num) {
+      
+            $sailsSocket.post('/api/mat/removejudge', {id:id, judge: num})
+            .success(function(resp) {
+
+            })
+            .error(function(resp) {
+                console.error('Remove Judge Error', resp);
+            })
+        }
+
         return ms;
 
     })
