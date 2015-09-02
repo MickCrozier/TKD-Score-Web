@@ -24,18 +24,27 @@
             });
         };
 
-        s.areYouSure = function(question, yesFn, noFn) {
+        s.areYouSure = function(question, yesFn, noFn, yesText, noText) {
             if(!question) {
                 var question = "Are you sure";
+            }
+
+            if(!yesText) {
+                var yesText = "Yes";
+            }
+
+            if(!noText) {
+                var noText = "No";
             }
             
             ngDialog.open({
                 //windowClass: 'modal-small',
                 plain: true,
 
-                template: '<div class="modal-body">' + question + '?</div><button class="btn btn-md btn-danger" ng-click="onYesClick($event)">Yes</button><button class="btn btn-md btn-success" ng-click="onNoClick($event)">No</button>',
+                template: '<div class="modal-body">' + question + '?</div><button class="btn btn-md btn-danger btn-block" ng-click="onYesClick($event)">' + yesText + '</button><button class="btn btn-md btn-success btn-block" ng-click="onNoClick($event)">' + noText + '</button>',
                 controller: ['$scope',
                     function($scope) {
+
                         $scope.onYesClick = function(e) {
                             yesFn();
                             $scope.closeThisDialog('doit');

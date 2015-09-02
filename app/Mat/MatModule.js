@@ -514,7 +514,7 @@
                 };
 
                 function resetMat() {
-                    AlertService.areYouSure("Are you sure you want reset the match?", function(){Mat.resetMat(mat.id);});
+                    AlertService.areYouSure("Are you sure you want reset the match?", function(){Mat.resetMat(mat.id);}, null, "Reset", "No way! It's not over yet!");
                 };
 
                 function pauseResume() {
@@ -552,7 +552,18 @@
                 this.registerTurn = registerTurn;
                 this.declareWinner = declareWinner;
 
-            
+
+
+
+         
+                
+                   
+
+
+
+                addNoClickDelayToButtonClass('btn');
+
+      
             },
 
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
@@ -664,6 +675,9 @@
                 this.register = register;
                 this.registered = registered;
                 this.mat = mat;
+
+
+                addNoClickDelayToButtonClass('btn');
 
             
             },

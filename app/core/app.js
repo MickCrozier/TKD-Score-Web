@@ -80,6 +80,18 @@ angular.module('tkdscore', [
     });
 }])
 
+.directive("ngTouchstart", function () {
+  return {
+    controller: function ($scope, $element, $attrs) {
+      $element.bind('touchstart', onTouchStart);
+      
+      function onTouchStart(event) {
+        var method = $element.attr('ng-touchstart');
+        $scope.$apply(method);
+      };
+    }
+  };
+})
 
 // Socket error handling - does not work well.
 .run(['$sailsSocket', '$state', 'AlertService', function($sailsSocket, $state, AlertService){
@@ -129,13 +141,31 @@ angular.module('tkdscore', [
 }])
 */
 
+.run(function() {
+    document.getElementsByClassName = function(cl) {
+        var retnode = [];
+        var myclass = new RegExp('\\b' + cl + '\\b');
+        var elem = this.getElementsByTagName('*');
+        for (var i = 0; i < elem.length; i++) {
+            var classes = elem[i].className;
+            if (myclass.test(classes)) retnode.push(elem[i]);
+        }
+        return retnode;
+    };
+
+
+    
+})
+
+
+
 .run(['$log', '$rootScope', '$state', '$stateParams', 'SessionService', 'AlertService', '$cookieStore',
     function($log, $rootScope, $state, $stateParams, SessionService, AlertService, $cookieStore) {
          
         ///////////// Config stuff ///////////////////
         
 
-        FastClick.attach(document.body);
+        
         
 
 
@@ -232,4 +262,88 @@ angular.module('tkdscore', [
 
         });
     }
-]);
+])
+
+
+
+
+
+
+ // No Click Delay published by Matteo Spinelli - http://cubiq.org/remove-onclick-delay-on-webkit-for-iphone
+// Modified for broader mobile detection
+function NoClickDelay(el) {
+    this.element = el;
+    if (isTouchBrowser()) this.element.addEventListener('touchstart', this, false);
+}
+
+NoClickDelay.prototype = {
+    handleEvent: function(e) {
+        switch (e.type) {
+            case 'touchstart':
+                this.onTouchStart(e);
+                break;
+            case 'touchmove':
+                this.onTouchMove(e);
+                break;
+            case 'touchend':
+                this.onTouchEnd(e);
+                break;
+        }
+    },
+
+    onTouchStart: function(e) {
+        e.preventDefault();
+        this.moved = false;
+
+        this.element.addEventListener('touchmove', this, false);
+        this.element.addEventListener('touchend', this, false);
+    },
+
+    onTouchMove: function(e) {
+        this.moved = true;
+    },
+
+    onTouchEnd: function(e) {
+        this.element.removeEventListener('touchmove', this, false);
+        this.element.removeEventListener('touchend', this, false);
+
+        if (!this.moved) {
+            // Place your code here or use the click simulation below
+            var theTarget = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            if (theTarget.nodeType == 3) theTarget = theTarget.parentNode;
+
+            var theEvent = document.createEvent('MouseEvents');
+            theEvent.initEvent('click', true, true);
+            theTarget.dispatchEvent(theEvent);
+        }
+    }
+};
+
+
+
+
+
+
+function isTouchBrowser() {
+    
+    try {
+        document.createEvent("TouchEvent");
+        return true;
+    } catch (e) {
+        return false;
+    }
+    
+    //return true;
+}
+
+function addNoClickDelayToButtonClass(classname) { //Thanks to Joe Francia who posted this at http://cubiq.org/remove-onclick-delay-on-webkit-for-iphone
+    var buttons = document.getElementsByClassName(classname);
+    console.log(buttons);
+    for (var i = 0; i < buttons.length; i++) {
+        if (!buttons[i].clickDelayRemoved) {
+            new NoClickDelay(buttons[i]);
+            console.log(buttons[i]);
+            buttons[i].clickDelayRemoved = true;
+        }
+    }
+}
