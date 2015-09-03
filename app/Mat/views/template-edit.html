@@ -58,7 +58,7 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			Round Time
+			Round Time (sec)
 		</div>
 		<div class="col-sm-6">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.roundLengthMS" buttons="no" ng-blur="matEditorVm.save()">
@@ -67,7 +67,7 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			Break Time
+			Break Time (sec)
 		</div>
 		<div class="col-sm-6">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.breakLengthMS" buttons="no" ng-blur="matEditorVm.save()">
@@ -85,7 +85,7 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			Judge Score Timeout
+			Judge Score Timeout (ms)
 		</div>
 		<div class="col-sm-6">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.scoreTimeout" buttons="no" ng-blur="matEditorVm.save()">
@@ -112,7 +112,25 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			Points (HT, H, BT, B, Novice)
+			Novice Match (no head kicks)
+		</div>
+		<div class="col-xs-1">
+			<input type="checkbox" aria-label="..." class="checkbox" ng-model="matEditorVm.mat.novice" ng-change="matEditorVm.save()">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			Sound 10 sec end break warning
+		</div>
+		<div class="col-xs-1">
+			<input type="checkbox" aria-label="..." class="checkbox" ng-model="matEditorVm.mat.endBreakHorn" ng-change="matEditorVm.save()">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			Points (HT, H, BT, B)
 		</div>
 		<div class="col-xs-1">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.pointsHeadTurning" buttons="no" ng-blur="matEditorVm.save()">
@@ -126,9 +144,7 @@
 		<div class="col-xs-1">
 			<input type="text" class="form-control" ng-model="matEditorVm.mat.pointsBody" buttons="no" ng-blur="matEditorVm.save()">
 		</div>
-		<div class="col-xs-1">
-			<input type="checkbox" aria-label="..." class="checkbox" ng-model="matEditorVm.mat.novice" ng-change="matEditorVm.save()">
-		</div>
+		
 	</div>
 
 	<div class="row">

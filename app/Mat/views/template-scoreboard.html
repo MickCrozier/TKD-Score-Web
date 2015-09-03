@@ -53,7 +53,7 @@
 			<div id="roundclock"  class="scoreboard-round-timer" ng-bind="scoreboardVm.timer.roundTimeMS | formatTime:true">00:00</div>
 		</div>
 
- 		<div id="breakclock" class="scoreboard-break-timer" ng-bind="scoreboardVm.timer.breakTimeMS | formatTime:true" ng-show="scoreboardVm.timer.breakTimeMS < scoreboardVm.mat.breakLengthMS">
+ 		<div id="breakclock" class="scoreboard-break-timer" ng-bind="scoreboardVm.timer.breakTimeMS | formatTime:true" ng-show="scoreboardVm.timer.breakTimeMS < scoreboardVm.mat.breakLengthMS * 1000">
 		</div>
 
 		<div id="pauseclock" class="scoreboard-pause-timer" ng-bind="scoreboardVm.timer.pauseWatchMS | formatTime:false" ng-show="scoreboardVm.timer.pauseWatchMS > 0">

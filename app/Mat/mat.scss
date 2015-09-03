@@ -13,7 +13,12 @@
 }
 
 
-
+.list-container {
+	@extend .container;
+	width:100%;
+	min-width:90%;
+	margin:auto;
+}
 
 
 .controls {

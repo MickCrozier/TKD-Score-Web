@@ -399,6 +399,7 @@
 
                 plain: true,
                 className: 'ngdialog-theme-normal',
+                showClose: false,
                 template:'<div><mateditor item="item"></mateditor></div>',
                 
                 controller: ['$scope',
@@ -561,7 +562,7 @@
 
 
 
-                addNoClickDelayToButtonClass('btn');
+                
 
       
             },
@@ -677,7 +678,7 @@
                 this.mat = mat;
 
 
-                addNoClickDelayToButtonClass('btn');
+       
 
             
             },
@@ -847,7 +848,7 @@
             }
             return self.item;
             */
-            console.log('getting item from server');
+            //console.log('getting item from server');
             self.item = this.Model.findOne({id:id})
             return self.item;
         }

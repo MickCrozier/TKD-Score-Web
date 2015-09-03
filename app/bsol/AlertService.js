@@ -40,8 +40,11 @@
             ngDialog.open({
                 //windowClass: 'modal-small',
                 plain: true,
-
+                showClose: false,
+                closeByEscape: false,
+                closeByDocument: false,
                 template: '<div class="modal-body">' + question + '?</div><button class="btn btn-md btn-danger btn-block" ng-click="onYesClick($event)">' + yesText + '</button><button class="btn btn-md btn-success btn-block" ng-click="onNoClick($event)">' + noText + '</button>',
+                
                 controller: ['$scope',
                     function($scope) {
 
