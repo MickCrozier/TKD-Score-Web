@@ -80,13 +80,21 @@ angular.module('tkdscore', [
     });
 }])
 
-.directive("ngTouchstart", function () {
+.directive("ngTap", function () {
   return {
     controller: function ($scope, $element, $attrs) {
-      $element.bind('touchstart', onTouchStart);
+        var tapEvent = false;
+        if ("ontouchstart" in document.documentElement) {
+            tapEvent = 'touchstart';
+        } else {
+            tapEvent = 'mousedown';
+        }
+
+
+      $element.bind(tapEvent, onTapEvent);
       
-      function onTouchStart(event) {
-        var method = $element.attr('ng-touchstart');
+      function onTapEvent(event) {
+        var method = $element.attr('ng-tap');
         $scope.$apply(method);
       };
     }

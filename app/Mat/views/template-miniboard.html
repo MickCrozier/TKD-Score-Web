@@ -19,7 +19,6 @@
  
 <div class="scoreboard-mini">
 	<div class="row">
-
 		<div class="col-xs-4 scoreboard-break-timer">
 			<div ng-show="scoreboardVm.timer.breakTimeMS < scoreboardVm.mat.breakLengthMS * 1000" ng-bind="scoreboardVm.timer.breakTimeMS | formatTime:true">
 			</div>
@@ -45,7 +44,7 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row" style="height:100%">
 		<div class="col-xs-6 scoreboard-left scoreboard-score" ng-bind="scoreboardVm.mat.player1Points">
 		</div>
 
